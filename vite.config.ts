@@ -8,7 +8,7 @@ import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact, { reactCompilerPreset } from '@vitejs/plugin-react'
 import babel from '@rolldown/plugin-babel'
 import tailwindcss from '@tailwindcss/vite'
-import { nitro } from 'nitro/vite'
+import { cloudflare } from '@cloudflare/vite-plugin'
 import contentCollections from '@content-collections/vite'
 // nub installs dependencies into a global virtual store (pnpm-shaped), which
 // lives outside the project root. Vite's dev server only serves files under
@@ -29,7 +29,7 @@ const config = defineConfig({
   },
   plugins: [
     devtools(),
-    nitro({ rollupConfig: { external: [/^@sentry\//] } }),
+    cloudflare({ viteEnvironment: { name: 'ssr' } }),
     tailwindcss(),
     contentCollections(),
     tanstackStart(),

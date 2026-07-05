@@ -1,0 +1,263 @@
+---
+title: "asdf - the NVM of everything"
+description: "Manage multiple runtime versions with a single CLI tool. The toolchain version manager."
+date: 2023-03-06
+tags:
+  - "asdf"
+  - "nvm"
+  - "nodejs"
+  - "volta"
+  - "toolchain"
+  - "version"
+  - "manager"
+author:
+  name: "sharath"
+  social: "https://github.com/tnfssc"
+  image: "https://github.com/tnfssc.png"
+heroImage: "https://cdn.sharath.uk/20246-s0gnz.jpg"
+---
+
+For all the lazy readers 🤓 out there, [click here](#how-to-use) to skip ahead to the important bit on how to use the thing. I highly recommend NOT skipping for first time readers.
+
+## Why?
+
+### 😖 The Problem.
+
+Your projects are complex. You use various languages, tools and software to write code. Many times, you find your self needing to use multiple versions of a toolchain (like node, yarn; php, composer; rustc, rustup; python, pip etc.) in the same project or at the same time.
+
+For me, it was with NodeJS. The frontend uses Node 18. The backend uses Node 16. I cannot run both at the same time. I had to use either `brew install node@18` or `brew install node@16`, which I cannot do.
+
+### 🤢 Early solutions.
+
+I had to use Docker to run both of them at the same time. But sometimes, you want get things done quicker. Sometimes you don't want to use the cumbersome Docker development environment. Even if you do set it all up in Docker, you still have install stuff like `build-essential`, `cmake`, `git` etc. You will lose your favorite [pretty terminal (click to learn)](https://ghost.sharath.uk/make-a-pretty-terminal-3/). You also lose your local files to quickly copy paste. This is a hassle.
+
+I learnt about [`nvm` (Node Version Manager)](https://nvm.sh/?ref=www.sca.run). It's a tool to configure different NodeJS environment versions to different projects. You can choose which NodeJS version to run the project on.
+
+I started using it and loved it (for now). It was awesome and everything was working well. I completed my projects and went to sleep, not knowing that I would be dealing with `php` some day.
+
+### 🤮 The ~NEW~ Problem.
+
+PHP hit my life. Now I have to deal with the same problem as NodeJS. Thing like `nvm` exist for PHP too. I could use something like [`phpenv`](https://github.com/phpenv/phpenv?ref=www.sca.run). But then I realised, yesterday it was NodeJS. Today it is PHP. Tomorrow it will be Go. Then it's gonna be Rust. This is a problem. Installing `phpenv` was not a solution, it was a bandaid. Docker is the solution, but it's too cumbersome.
+
+I need something that does more than just version managing a tool but not something that version manages my entire environment. I needed something like `nvm`, which I loved to use, but for every tool/language I am going to use in the future.
+
+And then I found (drumrolls)... nothing. So I just kept using Docker.
+
+### 🤧 That Random Day when it happened.
+
+I was just scrolling through GitHub's _Explore_ page (as I always do every night before going to bed). I saw the title `asdf-vm/asdf` and didn't pay much attention. I scrolled right past it.
+
+The next day, I was suggested the [asdfmovie playlist](https://www.youtube.com/watch?v=IYnsfV5N2n8&list=PL6HF94r1ogByYa2xFAXIE_1Pw-K0AU_Vd&index=1&ref=www.sca.run) on YouTube. I rewatched the whole playlist and enjoyed feeling nostalgic.
+
+That night, I was scrolling throught GitHub's Explore page again. I saw `asdf-vm/asdf` again. This time, I clicked. And little did I know, it was gonna change my life.
+
+### 😮 The Solution.
+
+[`asdf`](https://asdf-vm.com/?ref=www.sca.run) is the same as `nvm`, but for many toolchains. It has support for NodeJS, PHP, Python, Go, Rust etc., it's even got support for `kubectl`, `minikube` for all the DevOps guys out there.
+
+![asdf-vm.com](https://cdn.sharath.uk/20246-tlzpd.png)
+
+## How to use?
+
+### 😉 Prerequisites
+
+- Linux or macOS. Windows users can jump off a cliff 🤓👍 (not financial advice)
+- Install `curl` and `git`. `sudo apt install curl git` on Debian. `brew install coreutils curl git` on macOS. Other OSes refer the [official docs](https://asdf-vm.com/guide/getting-started.html?ref=www.sca.run#_1-install-dependencies).
+
+### 🔥 Installation
+
+#### Clone the repo
+
+Run the following command to clone the repo into your `~/.asdf` directory.
+
+```sh
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+```
+
+---
+
+#### Determine your current shell
+
+If you know what shell you are using, well that's good. Use the following command to confirm what shell you are using. If it outputs something like `/bin/zsh`, it means that you are using `zsh` shell.
+
+```sh
+echo $SHELL
+```
+
+![echo $SHELL](https://cdn.sharath.uk/20246-uxakt.png)
+
+#### Configuring your shell
+
+Run the command depending on what shell you are using
+
+`zsh` users (default on macOS)
+
+```sh
+echo '. "$HOME/.asdf/asdf.sh"' >> ~/.zshrc
+echo "fpath=($ASDF_DIR/completions $fpath)" >> ~/.zshrc
+echo "autoload -Uz compinit && compinit" >> ~/.zshrc
+```
+
+`bash` users (default on linux or old macOS)
+
+```sh
+echo '. "$HOME/.asdf/asdf.sh"' >> ~/.bashrc
+echo '. "$HOME/.asdf/completions/asdf.bash"' >> ~/.bashrc
+```
+
+`fish` users (the one I use)
+
+```sh
+mkdir -p ~/.config/fish/completions
+ln -s ~/.asdf/completions/asdf.fish ~/.config/fish/completions
+echo -e '\nsource ~/.asdf/asdf.fish' >> ~/.config/fish/config.fish
+echo -e '\nlegacy_version_file = yes' >> ~/.asdfrc
+```
+
+`nushell` and `elvish` users
+
+Please follow [offical documentation](https://asdf-vm.com/guide/getting-started.html?ref=www.sca.run#_3-install-asdf)
+
+#### Restart your terminal
+
+Just reopen the terminal application
+
+### Plugins
+
+You can't do much with just asdf installed. You need plugins to install any toolchain.
+
+You can list all available plugins by using
+
+```sh
+asdf plugin list all
+```
+
+![asdf plugin list all](https://cdn.sharath.uk/20246-mpqdz.png)
+
+You can also look for plugins over [here](https://github.com/asdf-vm/asdf-plugins/tree/master/plugins?ref=www.sca.run)
+
+---
+
+To add a plugin, use the command
+
+```sh
+asdf plugin add nodejs # Add the NodeJS plugin
+asdf plugin add deno # Add the Deno plugin
+```
+
+We are not done yet. We have `asdf` and we have our plugins. We are still missing the actual toolchain.
+
+To see all available versions of the toolchain, use the command
+
+```sh
+asdf list all nodejs
+```
+
+![asdf list all nodejs](https://cdn.sharath.uk/20246-smgvk.png)
+
+---
+
+To install as specific version, use
+
+```sh
+asdf install nodejs lts
+# or
+asdf install nodejs 20.14.0
+```
+
+![asdf install nodejs lts](https://cdn.sharath.uk/20246-dupol.png)
+
+---
+
+We are done with installation, but if you type in `node -v` in your terminal, you will encounter an error. Here's what you get for `deno -v`.
+
+![node version](https://cdn.sharath.uk/20246-c6crg.png)
+
+### Configuration
+
+Just like how `nvm` expects a `.nvmrc` file in the root of your project, `asdf` expects a `.tool-versions` in the root of your project.
+
+To set a global (default) version, use the command
+
+```sh
+asdf global deno 1.31.1
+```
+
+This creates a `~/.tool-versions` file. This file holds the versions to use by default on your computer. Here's my `.tool-versions` global configuration for example.
+
+```sh
+cat ~/.tool-versions
+
+# bun 0.5.7
+# golang 1.20.1
+# nodejs 18.13.0
+# rust 1.67.1
+# rust-analyzer 2023-02-27
+# neovim 0.8.0
+# deno 1.31.1
+```
+
+You can create a similar file in your project's root with the versions you want. Just remember to name it correctly.
+
+### Uninstallation
+
+You already know how to use `asdf`.
+
+You can install a tool version using
+
+```sh
+asdf install [toolshortname] [version]
+
+# For example
+asdf install nodejs 18.12.1
+```
+
+You can switch to it on a global context by editing `~/.tool-versions` file. Or you could use the
+
+```sh
+asdf global [toolshortname] [version]
+
+# For example
+asdf global nodejs 18.12.1
+```
+
+You list all the installed versions of a tool using
+
+```sh
+asdf list [toolname]
+
+# For example
+asdf list nodejs
+  16.18.1
+ *18.12.1
+```
+
+Don't forget that you can create `.tool-versions` file in any project root. `asdf` automagically determines the version of tool to be used depending on where you are `cd`ed in your terminal. The global `~/.tool-versions` is the default when `asdf` cannot find a `.tool-versions` file in the current directory, it falls back to the global configuration.
+
+### Troubleshooting
+
+One of the most common problems you encounter is that `command not found` error when you try to use something like `yarn`, `npx` or `corepack`. This could also occur when you install something like `pm2` using `npm install --global pm2` or `yarn global add pm2`. To resolve this, simply run
+
+```sh
+asdf reshim
+```
+
+This should fix all `command not found` errors.
+
+### Uninstallation
+
+Remove the `asdf` lines from your `~/.config/fish/config.fish`, `.bashrc` or `.zshrc` file.
+
+Remove the entire `~/.asdf` directory. Remove the `~/.asdfrc` and `~/.tool-versions` file.
+
+Restart your terminal
+
+```sh
+rm -rf ~/.asdf
+rm ~/.asdfrc ~/.tool-versions
+exec $SHELL
+```
+
+## Here's my cat's collage btw
+
+![cat's collage](https://cdn.sharath.uk/20246-jb33y.jpg)

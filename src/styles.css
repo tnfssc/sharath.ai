@@ -1,0 +1,230 @@
+@import '@fontsource-variable/fraunces/index.css';
+@import '@fontsource-variable/hanken-grotesk/index.css';
+@import 'highlight.js/styles/github-dark.css';
+@import 'tailwindcss';
+
+@plugin 'tailwindcss-animate';
+
+/* Enable every built-in daisyUI theme; selected at runtime via data-theme on <html>. */
+@plugin 'daisyui' {
+  themes:
+    light --default, dark --prefersdark, cupcake, bumblebee, emerald, corporate, synthwave, retro,
+    cyberpunk, valentine, halloween, garden, forest, aqua, lofi, pastel, fantasy, wireframe, black,
+    luxury, dracula, cmyk, autumn, business, acid, lemonade, night, coffee, winter, dim, nord, sunset,
+    caramellatte, abyss, silk;
+}
+
+/* Prose bodies for blog posts (@tailwindcss/typography). Token colors are
+ * overridden below with daisyUI theme tokens so posts recolor with the theme. */
+@plugin "@tailwindcss/typography";
+
+/* Theming is driven by daisyUI data-theme, not the .dark class — keep dark: utilities inert. */
+@custom-variant dark (&:is(.dark *));
+
+/* Type pairing: Fraunces (display serif) + Hanken Grotesk (body). See DESIGN.md. */
+@theme {
+  --font-sans: 'Hanken Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Fraunces Variable', ui-serif, Georgia, serif;
+}
+
+/*
+ * Bridge shadcn design tokens to daisyUI theme tokens.
+ * Only shadcn-ONLY color names are mapped here. Names that daisyUI already defines
+ * (--color-primary, --color-secondary, --color-accent and their -content) are intentionally
+ * NOT redefined — redefining them would be circular. This way every shadcn primitive
+ * recolors automatically with the active daisyUI theme.
+ */
+@theme inline {
+  --color-background: var(--color-base-100);
+  --color-foreground: var(--color-base-content);
+  --color-card: var(--color-base-100);
+  --color-card-foreground: var(--color-base-content);
+  --color-popover: var(--color-base-100);
+  --color-popover-foreground: var(--color-base-content);
+  --color-primary-foreground: var(--color-primary-content);
+  --color-secondary-foreground: var(--color-secondary-content);
+  --color-muted: var(--color-base-200);
+  --color-muted-foreground: var(--color-base-content);
+  --color-accent-foreground: var(--color-accent-content);
+  --color-destructive: var(--color-error);
+  --color-destructive-foreground: var(--color-error-content);
+  --color-border: var(--color-base-300);
+  --color-input: var(--color-base-300);
+  --color-ring: var(--color-primary);
+  --color-sidebar: var(--color-base-200);
+  --color-sidebar-foreground: var(--color-base-content);
+  --color-sidebar-primary: var(--color-primary);
+  --color-sidebar-primary-foreground: var(--color-primary-content);
+  --color-sidebar-accent: var(--color-accent);
+  --color-sidebar-accent-foreground: var(--color-accent-content);
+  --color-sidebar-border: var(--color-base-300);
+  --color-sidebar-ring: var(--color-primary);
+
+  --radius-sm: calc(0.5rem - 4px);
+  --radius-md: calc(0.5rem - 2px);
+  --radius-lg: 0.5rem;
+  --radius-xl: calc(0.5rem + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+  /* Headings default to the display face. */
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+  }
+}
+
+/*
+ * Animated underline draw. One class, two triggers: draws on self-hover
+ * (links) and when an ancestor .group is hovered (row name spans).
+ * Uses currentColor so it recolors with hover:text-primary / group-hover.
+ */
+@layer components {
+  .link-draw {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 0 1px;
+    transition: background-size 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .link-draw:hover,
+  .group:hover .link-draw {
+    background-size: 100% 1px;
+  }
+  /* Liquid-fill hover for footer social icons. Stacked on top of a gray base
+   * copy; clip-path reveals from bottom upward (like water rising in a vessel).
+   * The rising motion itself is the "pour"; ease-out cubic per project motion
+   * rule (no bounce/elastic overshoot). */
+  .liquid-fill {
+    /* Override lucide's fill="none" attribute so the overlay becomes a
+     * solid brand-colored silhouette. Stroke is left alone — lucide's
+     * stroke="currentColor" attribute still applies (so outline strokes
+     * recolor to brand), while Simple-Icons overlays have no stroke
+     * attribute and stay pure filled shapes. */
+    fill: currentColor;
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .liquid-fill:hover,
+  .group:hover .liquid-fill {
+    clip-path: inset(0 0 0 0);
+  }
+}
+/* Invert the white logo on light themes. daisyUI sets color-scheme on <html>. */
+:root[color-scheme="light"] .logo-invert-light,
+[data-theme="light"] .logo-invert-light,
+[data-theme="cupcake"] .logo-invert-light,
+[data-theme="bumblebee"] .logo-invert-light,
+[data-theme="emerald"] .logo-invert-light,
+[data-theme="corporate"] .logo-invert-light,
+[data-theme="garden"] .logo-invert-light,
+[data-theme="pastel"] .logo-invert-light,
+[data-theme="fantasy"] .logo-invert-light,
+[data-theme="wireframe"] .logo-invert-light,
+[data-theme="cmyk"] .logo-invert-light,
+[data-theme="autumn"] .logo-invert-light,
+[data-theme="lemonade"] .logo-invert-light,
+[data-theme="winter"] .logo-invert-light,
+[data-theme="caramellatte"] .logo-invert-light,
+[data-theme="silk"] .logo-invert-light {
+  filter: invert(1);
+}
+/* Primary-tinted text selection. Smooth anchor scroll is handled by JS
+   (see __root.tsx) so route-change scroll-to-top stays instant — global
+   `scroll-behavior: smooth` on <html> would animate TanStack Router's
+   scrollRestoration call and produce a slow ~1s creep to top on every nav. */
+::selection {
+  background: color-mix(in oklab, var(--color-primary) 30%, transparent);
+  color: var(--color-primary-content);
+}
+
+/* Recolor @tailwindcss/typography `prose` with daisyUI theme tokens so blog
+ * posts adapt to the active data-theme. Code blocks keep the github-dark hljs
+ * theme; inline code uses the token color. Unlayered to win over the plugin. */
+.prose {
+  --tw-prose-body: color-mix(in oklab, var(--color-base-content) 85%, transparent);
+  --tw-prose-headings: var(--color-base-content);
+  --tw-prose-lead: color-mix(in oklab, var(--color-base-content) 80%, transparent);
+  --tw-prose-links: var(--color-primary);
+  --tw-prose-bold: var(--color-base-content);
+  --tw-prose-counters: color-mix(in oklab, var(--color-base-content) 60%, transparent);
+  --tw-prose-bullets: color-mix(in oklab, var(--color-base-content) 40%, transparent);
+  --tw-prose-hr: var(--color-base-300);
+  --tw-prose-quotes: var(--color-base-content);
+  --tw-prose-quote-borders: var(--color-primary);
+  --tw-prose-captions: color-mix(in oklab, var(--color-base-content) 60%, transparent);
+  --tw-prose-code: var(--color-primary);
+  --tw-prose-pre-code: var(--color-base-content);
+  --tw-prose-pre-bg: var(--color-base-200);
+  --tw-prose-th-borders: var(--color-base-300);
+  --tw-prose-td-borders: var(--color-base-300);
+}
+
+/* ─── View Transitions system ──────────────────────────────────────────────
+   Two animation layers that coexist without conflict:
+
+   1. HARD LOADS (direct URL, refresh, first visit):
+      No view transition fires (no previous state to morph from). The
+      `.content-enter` CSS animation on <main> provides a subtle fade+rise.
+      React state in __root.tsx (isInitialLoad) controls the class — it's
+      added on mount and removed after 400ms, so the animation can never
+      restart on in-app navigations.
+
+   2. IN-APP NAVIGATION (clicking a <Link>):
+      `defaultViewTransition` in router.tsx wraps the navigation in
+      `document.startViewTransition({ update, types })`. The `types` callback
+      emits `navigate-forward` or `navigate-back` based on history index
+      (__TSR_index, per TanStack's own VT example). All content cross-fades
+      as `root` / `main-content`. Named elements (`blog-heading`,
+      `post-{kind}-{slug}`) morph position+size independently — these are
+      the primary visual signal, so no directional slide is applied to
+      `main-content` (the slide's opaque layers obscured the morphs).
+
+   RULE: `view-transition-name` must be unique per snapshot or the transition
+   is SKIPPED entirely. Per-slug suffixing on list rows ensures uniqueness.
+
+   All motion: 0.4s, reduced-motion gated. ──────────────────────────────── */
+
+/* ── Keyframes ── */
+@keyframes content-enter { from { opacity: 0; transform: translateY(8px); } }
+
+/* ── Hard-load entrance (controlled by React state in __root.tsx) ── */
+.content-enter {
+  animation: content-enter 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── Default group timing (root cross-fade + all named morphs) ── */
+::view-transition-old(root),
+::view-transition-new(root),
+::view-transition-group(*) {
+  animation-duration: 0.4s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── blog-heading: snap content, morph position+size only ──
+   The old (large serif H1) and new (small sans link) have different fonts.
+   Cross-fading different fonts creates a visual flash. Snap the content
+   swap instantly (step-end) while the group animates position+size over
+   0.4s — the text glides without font overlap. */
+::view-transition-old(blog-heading),
+::view-transition-new(blog-heading) {
+  animation-duration: 0.01s;
+  animation-timing-function: step-end;
+}
+
+/* ── Reduced motion: disable everything ── */
+@media (prefers-reduced-motion: reduce) {
+  .content-enter,
+  ::view-transition-old(root),
+  ::view-transition-new(root),
+  ::view-transition-group(*) {
+    animation: none;
+  }
+}

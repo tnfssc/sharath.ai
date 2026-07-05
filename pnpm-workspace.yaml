@@ -1,0 +1,18 @@
+allowBuilds:
+  "@google/genai": true
+  core-js: true
+  esbuild: true
+  protobufjs: true
+  sharp: true
+  workerd: true
+onlyBuiltDependencies:
+  - "@biomejs/biome"
+  - "@google/genai"
+  - core-js
+  - esbuild
+  - oxc-resolver
+  - protobufjs
+  - rolldown
+  - sharp
+  - unrs-resolver
+  - workerd

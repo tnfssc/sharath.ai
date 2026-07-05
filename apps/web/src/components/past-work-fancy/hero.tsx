@@ -10,6 +10,7 @@ import { VibeReveal } from '#/components/ui/vibe-reveal'
 import { WaveText } from '#/components/ui/wave-text'
 import { PointerHint } from '#/components/ui/pointer-hint'
 import { DiscoLights } from '#/components/ui/disco-lights'
+import { VibeFloaters } from '#/components/ui/vibe-floaters'
 import { useVibeAudio } from '#/lib/use-vibe-audio'
 import { vtState } from '#/lib/vt'
 
@@ -37,6 +38,7 @@ export function Hero() {
   return (
     <section className="relative flex min-h-[88dvh] flex-col items-center justify-center px-6 pt-16 text-center">
       <DiscoLights active={disco} />
+      <VibeFloaters active={disco} />
       <motion.h1
         animate={{ opacity: 1, y: 0 }}
         className="relative z-10 text-6xl font-medium tracking-tight text-base-content md:text-8xl"

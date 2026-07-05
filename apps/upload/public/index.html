@@ -231,7 +231,7 @@
         <input type="file" id="file" />
       </label>
 
-      <div class="file" id="file">
+      <div class="file" id="fileRow">
         <div class="icon">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z" />
@@ -273,7 +273,7 @@
       const $ = (id) => document.getElementById(id);
       const dropzone = $("dropzone");
       const input = $("file");
-      const fileBox = $("file");
+      const fileBox = $("fileRow");
       const fileName = $("fileName");
       const fileSize = $("fileSize");
       const removeBtn = $("remove");
@@ -362,6 +362,7 @@
         if (!currentFile) return;
         const file = currentFile;
         uploadBtn.disabled = true;
+        uploadBtn.textContent = "Uploading…";
         clearError();
         resultBox.classList.remove("show");
         progress.classList.add("show");
@@ -376,8 +377,9 @@
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ filename: file.name, size: file.size }),
           });
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.error || "Failed to get upload URL");
+          let data = null;
+          try { data = await res.json(); } catch {}
+          if (!res.ok) throw new Error(data?.error || `Upload service error (HTTP ${res.status}).`);
           ({ uploadUrl, publicUrl } = data);
         } catch (err) {
           progress.classList.remove("show");
@@ -413,6 +415,7 @@
             input.value = "";
             fileBox.classList.remove("show");
             uploadBtn.disabled = true;
+            uploadBtn.textContent = "Upload";
             progress.classList.remove("show");
             progressLabel.classList.remove("show");
             progressBar.style.width = "0%";
@@ -428,6 +431,7 @@
             progress.classList.remove("show");
             progressLabel.classList.remove("show");
             uploadBtn.disabled = false;
+            uploadBtn.textContent = "Upload";
             showError(err.message || "Upload failed.");
           },
         );

@@ -37,6 +37,10 @@ app.post('/api/presign', async (c) => {
     CDN_BASE_URL,
   } = c.env
 
+  if (!R2_ACCESS_KEY_ID || !R2_SECRET_ACCESS_KEY || !R2_ACCOUNT_ID || !R2_BUCKET_NAME || !CDN_BASE_URL) {
+    return c.json({ error: 'Server is missing R2 configuration (R2_* secrets / CDN_BASE_URL not set).' }, 500)
+  }
+
   let filename: unknown
   let size: unknown
   try {

@@ -1,6 +1,9 @@
 [
   {
-    "AllowedOrigins": ["https://upload.sharath.ai"],
+    "AllowedOrigins": [
+      "https://upload.sharath.uk",
+      "https://upload-cdn.tnfssc.workers.dev"
+    ],
     "AllowedMethods": ["PUT"],
     "AllowedHeaders": ["*"],
     "ExposeHeaders": ["ETag"],

@@ -30,9 +30,9 @@ Strip the new project's template/demo cruft so what remains is a real foundation
 - `src/lib/demo-*`, `src/hooks/demo.*`, demo components (`demo.*.tsx`, `demo-GuitarRecommendation`, `demo-AIAssistant`, `demo.FormComponents`)
 - **`src/components/ResumeAssistant*`, `src/lib/resume-*`, `src/lib/resume-ai-hook.*`** — delete
 - Unused shadcn primitives left orphaned after the above
-- Regenerate `src/routeTree.gen.ts` (`nub run generate-routes`) so dead routes disappear
+- Regenerate `src/routeTree.gen.ts` (`pnpm generate-routes`) so dead routes disappear
 
-**Gate:** `nub run dev` boots, `/` renders the default page, no broken imports.
+**Gate:** `pnpm dev` boots, `/` renders the default page, no broken imports.
 
 ---
 
@@ -45,7 +45,7 @@ design — structure/data ports from the old site; styling does NOT.
 
 Reference: https://daisyui.com/SKILL.md (daisyUI 5, official skill doc).
 
-- `nub add -D daisyui@latest`, add `@plugin "daisyui";` to `src/styles.css`.
+- `pnpm add -D daisyui@latest`, add `@plugin "daisyui";` to `src/styles.css`.
 - **Support ALL built-in daisyUI themes** — enable every theme in the plugin config, not a single
   custom palette:
   ```css
@@ -95,7 +95,7 @@ Before writing daisyUI markup for each portfolio section, read 2–3 candidate c
 https://daisyui.com/components/ and pick the best fit by intent (e.g. `timeline` for the career
 timeline, `tabs`/`collapse` for skills, `card`+`stat` for projects/oss).
 
-**Gate:** `nub run dev` → `/` hero renders + animates, `/past-work-fancy` shows all sections
+**Gate:** `pnpm dev` → `/` hero renders + animates, `/past-work-fancy` shows all sections
 (hero, skills, projects, freelance, timeline, oss), light/dark toggle works, responsive sidebar
 works, no console errors.
 
@@ -138,8 +138,6 @@ Detail when we get here. Sketch:
   sync via shared CSS vars so neither system goes off-theme.
 - **Portfolio components** have data + UI-dependency shapes I haven't fully read yet; read each
   component + the old `ui/*` it imports before porting, bring only what's referenced.
-- **`nub`** installs deps into a global virtual store outside the project root — `vite.config.ts`
-  already has the `server.fs.allow` fix for this; don't remove it.
 - **Linter/formatter:** new project uses **Biome** (old used oxlint/oxfmt). Don't port the old
   eslint/oxlint configs; follow Biome.
-- Old `package.json` uses pnpm + `tsgo`/`tsc`; new uses nub + Biome. Port code, not tooling config.
+- Old `package.json` uses pnpm; new uses pnpm + Biome. Port code, not tooling config.

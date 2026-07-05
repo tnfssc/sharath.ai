@@ -1,0 +1,21 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "ui": "tui",
+  "tasks": {
+    "build": {
+      "outputs": ["dist/**", ".output/**", ".tanstack/**", ".content-collections/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "typecheck": {},
+    "test": {},
+    "generate-routes": {
+      "cache": false
+    },
+    "cf-typegen": {
+      "cache": false
+    }
+  }
+}

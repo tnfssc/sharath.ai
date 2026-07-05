@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from '@tanstack/react-router'
 
-import { getPost, slugOf } from '#/lib/blog'
+import { getPost } from '#/lib/blog'
 import { renderMarkdown } from '#/lib/markdown'
 import { seo } from '#/lib/seo'
 

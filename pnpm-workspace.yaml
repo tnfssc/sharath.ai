@@ -1,5 +1,7 @@
 packages:
-  - "."
+  - "apps/*"
+  - "packages/*"
+
 allowBuilds:
   "@google/genai": true
   core-js: true
@@ -20,3 +22,4 @@ onlyBuiltDependencies:
   - workerd
 minimumReleaseAgeExclude:
   - daisyui
+  - '@cloudflare/workers-types@5.20260705.1'

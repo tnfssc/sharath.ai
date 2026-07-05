@@ -3,12 +3,14 @@ node_modules
 dist
 dist-ssr
 *.local
+.dev.vars
 .env
 .nitro
 .tanstack
 .wrangler
 .output
 .vinxi
+.turbo
 __unconfig*
 todos.json
 .content-collections/

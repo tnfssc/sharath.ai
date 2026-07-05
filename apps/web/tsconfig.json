@@ -1,0 +1,12 @@
+{
+  "extends": "@sharath/typescript-config/react.json",
+  "include": ["**/*.ts", "**/*.tsx"],
+  "compilerOptions": {
+    "paths": {
+      "#/*": ["./src/*"],
+      "@/*": ["./src/*"],
+      "content-collections": ["./.content-collections/generated"]
+    },
+    "types": ["vite/client"]
+  }
+}

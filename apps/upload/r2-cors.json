@@ -1,0 +1,9 @@
+[
+  {
+    "AllowedOrigins": ["https://upload.sharath.ai"],
+    "AllowedMethods": ["PUT"],
+    "AllowedHeaders": ["*"],
+    "ExposeHeaders": ["ETag"],
+    "MaxAgeSeconds": 3600
+  }
+]

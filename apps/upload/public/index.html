@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>upload — sharath.ai</title>
+    <meta name="robots" content="noindex" />
+    <style>
+      :root {
+        --bg: #0b0b0f;
+        --surface: #14141a;
+        --surface-2: #1b1b23;
+        --border: #2a2a35;
+        --border-strong: #3a3a48;
+        --text: #ececf1;
+        --text-dim: #9a9aa6;
+        --text-faint: #6b6b78;
+        --accent: #818cf8;
+        --accent-press: #6366f1;
+        --danger: #f87171;
+        --ok: #34d399;
+        color-scheme: dark;
+      }
+      * { box-sizing: border-box; }
+      html, body { height: 100%; }
+      body {
+        margin: 0;
+        background:
+          radial-gradient(1200px 600px at 50% -10%, #1a1a26 0%, transparent 60%),
+          var(--bg);
+        color: var(--text);
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        -webkit-font-smoothing: antialiased;
+      }
+      main {
+        width: 100%;
+        max-width: 460px;
+      }
+      header { margin-bottom: 28px; }
+      h1 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        margin: 0 0 6px;
+      }
+      header p {
+        margin: 0;
+        color: var(--text-dim);
+        font-size: 0.9rem;
+      }
+
+      .dropzone {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 40px 24px;
+        background: var(--surface);
+        border: 1.5px dashed var(--border-strong);
+        border-radius: 14px;
+        text-align: center;
+        cursor: pointer;
+        transition: border-color 0.15s, background 0.15s;
+      }
+      .dropzone:hover { border-color: var(--accent); background: var(--surface-2); }
+      .dropzone.drag {
+        border-color: var(--accent);
+        background: var(--surface-2);
+        box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.12);
+      }
+      .dropzone svg { width: 30px; height: 30px; color: var(--text-dim); }
+      .dropzone p { margin: 0; font-size: 0.92rem; color: var(--text-dim); }
+      .dropzone strong { color: var(--text); font-weight: 600; }
+      .dropzone .hint { font-size: 0.78rem; color: var(--text-faint); }
+      input[type="file"] { display: none; }
+
+      .file {
+        display: none;
+        margin-top: 14px;
+        padding: 14px 16px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        align-items: center;
+        gap: 12px;
+      }
+      .file.show { display: flex; }
+      .file .icon {
+        flex: none;
+        width: 36px; height: 36px;
+        border-radius: 9px;
+        background: var(--surface-2);
+        display: grid; place-items: center;
+        color: var(--accent);
+      }
+      .file .meta { flex: 1; min-width: 0; }
+      .file .name {
+        font-size: 0.88rem; font-weight: 500;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+      .file .size { font-size: 0.76rem; color: var(--text-faint); margin-top: 2px; }
+      .file button.remove {
+        flex: none;
+        background: transparent;
+        border: none;
+        color: var(--text-faint);
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 6px;
+      }
+      .file button.remove:hover { color: var(--danger); }
+
+      .progress {
+        display: none;
+        margin-top: 14px;
+        height: 6px;
+        background: var(--surface);
+        border-radius: 999px;
+        overflow: hidden;
+      }
+      .progress.show { display: block; }
+      .progress > div {
+        height: 100%;
+        width: 0%;
+        background: var(--accent);
+        transition: width 0.15s ease;
+      }
+      .progress-label {
+        display: none;
+        margin-top: 8px;
+        font-size: 0.78rem;
+        color: var(--text-dim);
+        text-align: right;
+      }
+      .progress-label.show { display: block; }
+
+      .actions { margin-top: 18px; display: flex; gap: 10px; }
+      button.primary {
+        flex: 1;
+        padding: 11px 16px;
+        background: var(--accent);
+        color: #0b0b0f;
+        font-weight: 600;
+        font-size: 0.9rem;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.12s, transform 0.05s;
+      }
+      button.primary:hover:not(:disabled) { background: var(--accent-press); }
+      button.primary:active:not(:disabled) { transform: translateY(1px); }
+      button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+
+      .result {
+        display: none;
+        margin-top: 18px;
+        padding: 16px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+      }
+      .result.show { display: block; }
+      .result .title {
+        display: flex; align-items: center; gap: 8px;
+        font-size: 0.85rem; font-weight: 600; color: var(--ok);
+        margin-bottom: 12px;
+      }
+      .url-row { display: flex; gap: 8px; }
+      .url-row input {
+        flex: 1; min-width: 0;
+        padding: 9px 12px;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text);
+        font-size: 0.82rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+      .url-row input:focus { outline: none; border-color: var(--accent); }
+      button.copy {
+        flex: none;
+        padding: 9px 14px;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        color: var(--text);
+        border-radius: 8px;
+        font-size: 0.82rem;
+        font-weight: 500;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      button.copy:hover { border-color: var(--accent); color: var(--accent); }
+      button.copy.done { color: var(--ok); border-color: var(--ok); }
+
+      .error {
+        display: none;
+        margin-top: 14px;
+        padding: 12px 14px;
+        background: rgba(248, 113, 113, 0.08);
+        border: 1px solid rgba(248, 113, 113, 0.3);
+        border-radius: 10px;
+        font-size: 0.82rem;
+        color: var(--danger);
+      }
+      .error.show { display: block; }
+
+      [hidden] { display: none !important; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Upload</h1>
+        <p>Drop a file, get a CDN URL. Up to 100&nbsp;MB.</p>
+      </header>
+
+      <label class="dropzone" id="dropzone" for="file">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 15V3m0 0L7 8m5-5l5 5" />
+          <path d="M5 17v2a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-2" />
+        </svg>
+        <p><strong>Click to browse</strong> or drag &amp; drop</p>
+        <span class="hint">Max 100 MB — returns a direct CDN link</span>
+        <input type="file" id="file" />
+      </label>
+
+      <div class="file" id="file">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z" />
+          </svg>
+        </div>
+        <div class="meta">
+          <div class="name" id="fileName"></div>
+          <div class="size" id="fileSize"></div>
+        </div>
+        <button class="remove" id="remove" type="button" title="Remove" aria-label="Remove file">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
+        </button>
+      </div>
+
+      <div class="progress" id="progress"><div id="progressBar"></div></div>
+      <div class="progress-label" id="progressLabel"></div>
+
+      <div class="error" id="error"></div>
+
+      <div class="actions">
+        <button class="primary" id="upload" type="button" disabled>Upload</button>
+      </div>
+
+      <div class="result" id="result">
+        <div class="title">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5" /></svg>
+          Uploaded
+        </div>
+        <div class="url-row">
+          <input id="url" type="text" readonly />
+          <button class="copy" id="copy" type="button">Copy</button>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      const MAX_SIZE = 100 * 1024 * 1024;
+
+      const $ = (id) => document.getElementById(id);
+      const dropzone = $("dropzone");
+      const input = $("file");
+      const fileBox = $("file");
+      const fileName = $("fileName");
+      const fileSize = $("fileSize");
+      const removeBtn = $("remove");
+      const uploadBtn = $("upload");
+      const progress = $("progress");
+      const progressBar = $("progressBar");
+      const progressLabel = $("progressLabel");
+      const errorBox = $("error");
+      const resultBox = $("result");
+      const urlField = $("url");
+      const copyBtn = $("copy");
+
+      let currentFile = null;
+
+      function formatSize(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+      }
+
+      function showError(msg) {
+        errorBox.textContent = msg;
+        errorBox.classList.add("show");
+      }
+      function clearError() {
+        errorBox.classList.remove("show");
+      }
+
+      function reset() {
+        currentFile = null;
+        input.value = "";
+        fileBox.classList.remove("show");
+        uploadBtn.disabled = true;
+        progress.classList.remove("show");
+        progressBar.style.width = "0%";
+        progressLabel.classList.remove("show");
+        progressLabel.textContent = "";
+        resultBox.classList.remove("show");
+        copyBtn.classList.remove("done");
+        copyBtn.textContent = "Copy";
+        clearError();
+      }
+
+      function setFile(file) {
+        clearError();
+        resultBox.classList.remove("show");
+        if (!file) return reset();
+        if (file.size > MAX_SIZE) {
+          showError(`"${file.name}" is ${formatSize(file.size)} — over the 100 MB limit.`);
+          return reset();
+        }
+        currentFile = file;
+        fileName.textContent = file.name;
+        fileSize.textContent = formatSize(file.size);
+        fileBox.classList.add("show");
+        uploadBtn.disabled = false;
+      }
+
+      input.addEventListener("change", () => setFile(input.files[0] ?? null));
+
+      ["dragenter", "dragover"].forEach((ev) =>
+        dropzone.addEventListener(ev, (e) => {
+          e.preventDefault();
+          dropzone.classList.add("drag");
+        }),
+      );
+      ["dragleave", "drop"].forEach((ev) =>
+        dropzone.addEventListener(ev, (e) => {
+          e.preventDefault();
+          dropzone.classList.remove("drag");
+        }),
+      );
+      dropzone.addEventListener("drop", (e) => {
+        const f = e.dataTransfer?.files?.[0];
+        if (f) setFile(f);
+      });
+
+      // Stop the dropzone click from re-triggering when interacting with the file row.
+      removeBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        reset();
+      });
+
+      async function upload() {
+        if (!currentFile) return;
+        const file = currentFile;
+        uploadBtn.disabled = true;
+        clearError();
+        resultBox.classList.remove("show");
+        progress.classList.add("show");
+        progressLabel.classList.add("show");
+        progressBar.style.width = "0%";
+        progressLabel.textContent = "Signing…";
+
+        let uploadUrl, publicUrl;
+        try {
+          const res = await fetch("/api/presign", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ filename: file.name, size: file.size }),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "Failed to get upload URL");
+          ({ uploadUrl, publicUrl } = data);
+        } catch (err) {
+          progress.classList.remove("show");
+          progressLabel.classList.remove("show");
+          showError(err.message || "Could not reach the upload service.");
+          uploadBtn.disabled = false;
+          return;
+        }
+
+        await new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open("PUT", uploadUrl);
+          xhr.upload.onprogress = (e) => {
+            if (e.lengthComputable) {
+              const pct = (e.loaded / e.total) * 100;
+              progressBar.style.width = pct + "%";
+              progressLabel.textContent =
+                pct >= 100 ? "Finalizing…" : `${pct.toFixed(0)}% · ${formatSize(e.loaded)} / ${formatSize(e.total)}`;
+            }
+          };
+          xhr.onload = () =>
+            xhr.status >= 200 && xhr.status < 300
+              ? resolve()
+              : reject(new Error(xhr.status === 0 ? "Network/CORS error talking to R2" : `Upload failed (HTTP ${xhr.status})`));
+          xhr.onerror = () => reject(new Error("Network error — if this persists, check the R2 bucket CORS config (see r2-cors.json)."));
+          xhr.send(file);
+        }).then(
+          () => {
+            // Show the result, then clear the picker for the next upload.
+            urlField.value = publicUrl;
+            resultBox.classList.add("show");
+            currentFile = null;
+            input.value = "";
+            fileBox.classList.remove("show");
+            uploadBtn.disabled = true;
+            progress.classList.remove("show");
+            progressLabel.classList.remove("show");
+            progressBar.style.width = "0%";
+            copyBtn.classList.remove("done");
+            copyBtn.textContent = "Copy";
+            // Best-effort auto-copy on success.
+            navigator.clipboard?.writeText(publicUrl).then(
+              () => { copyBtn.classList.add("done"); copyBtn.textContent = "Copied"; },
+              () => {},
+            );
+          },
+          (err) => {
+            progress.classList.remove("show");
+            progressLabel.classList.remove("show");
+            uploadBtn.disabled = false;
+            showError(err.message || "Upload failed.");
+          },
+        );
+      }
+
+      uploadBtn.addEventListener("click", upload);
+
+      copyBtn.addEventListener("click", () => {
+        navigator.clipboard?.writeText(urlField.value).then(() => {
+          copyBtn.classList.add("done");
+          copyBtn.textContent = "Copied";
+        });
+      });
+    </script>
+  </body>
+</html>

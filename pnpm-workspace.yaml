@@ -1,10 +1,5 @@
-allowBuilds:
-  "@google/genai": true
-  core-js: true
-  esbuild: true
-  protobufjs: true
-  sharp: true
-  workerd: true
+packages:
+  - "."
 onlyBuiltDependencies:
   - "@biomejs/biome"
   - "@google/genai"

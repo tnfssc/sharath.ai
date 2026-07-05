@@ -1,12 +1,27 @@
-[
-  {
-    "AllowedOrigins": [
-      "https://upload.sharath.uk",
-      "https://upload-cdn.tnfssc.workers.dev"
-    ],
-    "AllowedMethods": ["PUT"],
-    "AllowedHeaders": ["*"],
-    "ExposeHeaders": ["ETag"],
-    "MaxAgeSeconds": 3600
-  }
-]
+{
+  "rules": [
+    {
+      "allowed": {
+        "origins": [
+          "http://localhost:4321",
+          "http://localhost:5173",
+          "https://www.sharath.uk",
+          "https://blog.sharath.uk"
+        ],
+        "methods": ["GET"]
+      }
+    },
+    {
+      "allowed": {
+        "origins": [
+          "https://upload.sharath.uk",
+          "https://upload-cdn.tnfssc.workers.dev"
+        ],
+        "methods": ["PUT"],
+        "headers": ["*"]
+      },
+      "exposed_headers": ["ETag"],
+      "max_age_seconds": 3600
+    }
+  ]
+}

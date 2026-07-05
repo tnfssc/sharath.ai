@@ -8,6 +8,6 @@
     "directory": "./public"
   },
   "vars": {
-    "CDN_BASE_URL": "https://cdn.sharath.ai"
+    "CDN_BASE_URL": "https://cdn.sharath.uk/"
   }
 }

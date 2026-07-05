@@ -1,9 +1,11 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "sharath-upload",
+  "name": "upload-cdn",
   "main": "src/index.ts",
   "compatibility_date": "2026-07-04",
   "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "preview_urls": false,
   "assets": {
     "directory": "./public"
   },

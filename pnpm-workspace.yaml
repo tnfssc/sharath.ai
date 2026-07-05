@@ -11,3 +11,5 @@ onlyBuiltDependencies:
   - sharp
   - unrs-resolver
   - workerd
+minimumReleaseAgeExclude:
+  - daisyui

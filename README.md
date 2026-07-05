@@ -1,3 +1,5 @@
+<img width="220" height="220" alt="nothink-vibeonly (1)" src="https://github.com/user-attachments/assets/288a37cc-dc50-48fb-b527-f304e9dfad13" />
+
 # sharath.ai
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)

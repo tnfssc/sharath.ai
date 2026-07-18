@@ -15,11 +15,10 @@ import { vtState } from "#/lib/vt";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-// Theme-adaptive gradient: color-mix with base-content ensures contrast
-// in both light themes (darkens colors toward base-content) and dark themes
-// (lightens toward base-content). Matches disco lights palette.
-const GRADIENT =
-	"linear-gradient(135deg, color-mix(in oklab, var(--color-primary), var(--color-base-content) 20%), color-mix(in oklab, var(--color-secondary), var(--color-base-content) 20%), color-mix(in oklab, var(--color-accent), var(--color-base-content) 20%), color-mix(in oklab, var(--color-primary), var(--color-base-content) 20%))";
+// Must match the taglines rendered by HeroTagline (hero-tagline.tsx) so the
+// accessible name on the wrapper below tracks the visible text during disco.
+const TAGLINE_A = "Building next-gen software to make AI more accessible.";
+const TAGLINE_B = "Building next-gen slopware to make human life difficult.";
 
 const roles: [string, ...string[]] = [
 	"AI systems engineer",
@@ -39,63 +38,12 @@ export function Hero() {
 			<VibeFloaters active={disco} />
 			<motion.h1
 				animate={{ opacity: 1, y: 0 }}
-				className="relative z-10 text-6xl font-medium tracking-tight text-base-content md:text-8xl"
+				className="relative z-10 text-6xl font-medium tracking-tight text-foreground md:text-8xl"
 				initial={vtState.active ? false : { opacity: 0, y: 24 }}
 				transition={{ duration: 0.6, ease: EASE }}
 			>
 				<Magnetic strength={0.18}>
-					<span className="relative inline-block">
-						<motion.span
-							animate={{ opacity: disco ? 0 : 1 }}
-							transition={{ duration: 0.45, ease: EASE }}
-						>
-							Sharath
-						</motion.span>
-						{/* Blurred gradient copy behind — colored echo that matches the gradient */}
-						<motion.span
-							aria-hidden
-							className="absolute inset-0 bg-clip-text text-transparent"
-							style={{
-								backgroundImage: GRADIENT,
-								backgroundSize: "200% 100%",
-								backgroundPosition: "0% 0%",
-								filter: "blur(24px)",
-							}}
-							animate={{
-								opacity: disco ? 1 : 0,
-								backgroundPosition: disco ? ["0% 0%", "200% 0%"] : "0% 0%",
-							}}
-							transition={{
-								opacity: { duration: 0.45, ease: EASE },
-								backgroundPosition: disco
-									? { duration: 3, ease: "linear", repeat: Infinity }
-									: { duration: 0.3, ease: EASE },
-							}}
-						>
-							Sharath
-						</motion.span>
-						{/* Sharp gradient text on top */}
-						<motion.span
-							className="absolute inset-0 bg-clip-text text-transparent"
-							style={{
-								backgroundImage: GRADIENT,
-								backgroundSize: "200% 100%",
-								backgroundPosition: "0% 0%",
-							}}
-							animate={{
-								opacity: disco ? 1 : 0,
-								backgroundPosition: disco ? ["0% 0%", "200% 0%"] : "0% 0%",
-							}}
-							transition={{
-								opacity: { duration: 0.45, ease: EASE },
-								backgroundPosition: disco
-									? { duration: 3, ease: "linear", repeat: Infinity }
-									: { duration: 0.3, ease: EASE },
-							}}
-						>
-							Sharath
-						</motion.span>
-					</span>
+					<span className="relative inline-block">Sharath</span>
 				</Magnetic>
 			</motion.h1>
 
@@ -127,6 +75,7 @@ export function Hero() {
 				</VibeReveal>
 				<motion.p
 					animate={{ opacity: 1 }}
+					aria-label={disco ? TAGLINE_B : TAGLINE_A}
 					className="mt-6 max-w-md text-sm text-base-content/60 md:text-base"
 					initial={vtState.active ? false : { opacity: 0 }}
 					transition={{ delay: 0.3, duration: 0.5 }}

@@ -99,6 +99,14 @@ export function VibeReveal({
         >
           {reveal}
         </span>
+        {/* Keyboard-accessible, AT-exposed trigger. The clickable layers above
+            are decorative (visual only); this sr-only button carries the
+            action for keyboard and screen-reader users. */}
+        {onRevealClick && (
+          <button type="button" className="sr-only" onClick={onRevealClick}>
+            Toggle vibe audio
+          </button>
+        )}
       </span>
     )
   }
@@ -133,9 +141,21 @@ export function VibeReveal({
           className="absolute left-1/2 top-0 z-30 inline-flex -translate-x-1/2 cursor-pointer"
           onClick={onRevealClick}
         >
+          {/* Invisible duplicate of `reveal` that sizes this layer to the
+              reveal text bounds so the hint tracks the cursor correctly.
+              Cost: mounts WaveText twice (doubling its animations). Kept
+              because CSS-only sizing of masked motion content is fragile. */}
           <span className="invisible" aria-hidden>{reveal}</span>
           {hint}
         </span>
+      )}
+      {/* Keyboard-accessible, AT-exposed trigger. The masked/hint layers above
+          handle mouse clicks but are aria-hidden (decorative); this sr-only
+          button carries the action for keyboard and screen-reader users. */}
+      {onRevealClick && (
+        <button type="button" className="sr-only" onClick={onRevealClick}>
+          Toggle vibe audio
+        </button>
       )}
     </span>
   )

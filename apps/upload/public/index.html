@@ -15,7 +15,8 @@
         --border-strong: #3a3a48;
         --text: #ececf1;
         --text-dim: #9a9aa6;
-        --text-faint: #6b6b78;
+        /* lightened from #6b6b78 for WCAG contrast on the dark surface */
+        --text-faint: #8b8b97;
         --accent: #818cf8;
         --accent-press: #6366f1;
         --danger: #f87171;
@@ -80,7 +81,20 @@
       .dropzone p { margin: 0; font-size: 0.92rem; color: var(--text-dim); }
       .dropzone strong { color: var(--text); font-weight: 600; }
       .dropzone .hint { font-size: 0.78rem; color: var(--text-faint); }
-      input[type="file"] { display: none; }
+      /* Visually hidden but focusable: display:none removes the input from the
+         tab order and breaks keyboard file selection. The clip pattern keeps it
+         reachable via keyboard while hiding it visually. */
+      input[type="file"] {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
 
       .file {
         display: none;
@@ -158,6 +172,20 @@
       button.primary:hover:not(:disabled) { background: var(--accent-press); }
       button.primary:active:not(:disabled) { transform: translateY(1px); }
       button.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+      button.cancel {
+        flex: none;
+        padding: 11px 16px;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        color: var(--text-dim);
+        border-radius: 10px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: border-color 0.12s, color 0.12s;
+      }
+      button.cancel:hover:not(:disabled) { border-color: var(--danger); color: var(--danger); }
+      button.cancel:disabled { opacity: 0.45; cursor: not-allowed; }
 
       .result {
         display: none;
@@ -184,7 +212,7 @@
         font-size: 0.82rem;
         font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
       }
-      .url-row input:focus { outline: none; border-color: var(--accent); }
+      .url-row input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
       button.copy {
         flex: none;
         padding: 9px 14px;
@@ -247,22 +275,23 @@
         </button>
       </div>
 
-      <div class="progress" id="progress"><div id="progressBar"></div></div>
-      <div class="progress-label" id="progressLabel"></div>
+      <div class="progress" id="progress"><div id="progressBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div>
+      <div class="progress-label" id="progressLabel" aria-live="polite"></div>
 
-      <div class="error" id="error"></div>
+      <div class="error" id="error" role="alert"></div>
 
       <div class="actions">
         <button class="primary" id="upload" type="button" disabled>Upload</button>
+        <button class="cancel" id="cancel" type="button" disabled hidden>Cancel</button>
       </div>
 
-      <div class="result" id="result">
+      <div class="result" id="result" aria-live="polite">
         <div class="title">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5" /></svg>
           Uploaded
         </div>
         <div class="url-row">
-          <input id="url" type="text" readonly />
+          <input id="url" type="text" readonly aria-label="Public CDN URL" />
           <button class="copy" id="copy" type="button">Copy</button>
         </div>
       </div>
@@ -270,6 +299,8 @@
 
     <script>
       const MAX_SIZE = 100 * 1024 * 1024;
+      // 5-minute cap on a single PUT; large files on slow links otherwise hang.
+      const UPLOAD_TIMEOUT_MS = 300000;
 
       const $ = (id) => document.getElementById(id);
       const dropzone = $("dropzone");
@@ -279,6 +310,7 @@
       const fileSize = $("fileSize");
       const removeBtn = $("remove");
       const uploadBtn = $("upload");
+      const cancelBtn = $("cancel");
       const progress = $("progress");
       const progressBar = $("progressBar");
       const progressLabel = $("progressLabel");
@@ -288,6 +320,14 @@
       const copyBtn = $("copy");
 
       let currentFile = null;
+      // Tracked so the Cancel button can abort an in-flight PUT.
+      let activeXhr = null;
+
+      // Prevent the browser from intercepting drops outside the dropzone (which
+      // would navigate away from the page instead of uploading the file).
+      ["dragover", "drop"].forEach((ev) =>
+        window.addEventListener(ev, (e) => e.preventDefault(), { passive: false }),
+      );
 
       function formatSize(bytes) {
         if (bytes < 1024) return bytes + " B";
@@ -310,6 +350,7 @@
         uploadBtn.disabled = true;
         progress.classList.remove("show");
         progressBar.style.width = "0%";
+        progressBar.setAttribute("aria-valuenow", "0");
         progressLabel.classList.remove("show");
         progressLabel.textContent = "";
         resultBox.classList.remove("show");
@@ -343,6 +384,9 @@
       );
       ["dragleave", "drop"].forEach((ev) =>
         dropzone.addEventListener(ev, (e) => {
+          // dragleave fires when the pointer leaves a child element too; without
+          // this guard the highlight flickers off while still dragging inside.
+          if (e.currentTarget.contains(e.relatedTarget)) return;
           e.preventDefault();
           dropzone.classList.remove("drag");
         }),
@@ -359,16 +403,43 @@
         reset();
       });
 
+      function setUploading(isUploading) {
+        if (isUploading) {
+          uploadBtn.disabled = true;
+          uploadBtn.textContent = "Uploading…";
+          cancelBtn.disabled = false;
+          cancelBtn.hidden = false;
+        } else {
+          uploadBtn.textContent = "Upload";
+         uploadBtn.disabled = !currentFile;
+          cancelBtn.disabled = true;
+          cancelBtn.hidden = true;
+        }
+      }
+
+      cancelBtn.addEventListener("click", () => {
+        if (activeXhr) {
+          activeXhr.abort();
+          activeXhr = null;
+        }
+        progress.classList.remove("show");
+        progressLabel.classList.remove("show");
+        progressBar.style.width = "0%";
+        progressBar.setAttribute("aria-valuenow", "0");
+        setUploading(false);
+        showError("Upload cancelled.");
+      });
+
       async function upload() {
         if (!currentFile) return;
         const file = currentFile;
-        uploadBtn.disabled = true;
-        uploadBtn.textContent = "Uploading…";
+        setUploading(true);
         clearError();
         resultBox.classList.remove("show");
         progress.classList.add("show");
         progressLabel.classList.add("show");
         progressBar.style.width = "0%";
+        progressBar.setAttribute("aria-valuenow", "0");
         progressLabel.textContent = "Signing…";
 
         let uploadUrl, publicUrl;
@@ -385,22 +456,26 @@
         } catch (err) {
           progress.classList.remove("show");
           progressLabel.classList.remove("show");
+          setUploading(false);
           showError(err.message || "Could not reach the upload service.");
-          uploadBtn.disabled = false;
           return;
         }
 
         await new Promise((resolve, reject) => {
           const xhr = new XMLHttpRequest();
+          activeXhr = xhr;
           xhr.open("PUT", uploadUrl);
+          xhr.timeout = UPLOAD_TIMEOUT_MS;
           xhr.upload.onprogress = (e) => {
             if (e.lengthComputable) {
               const pct = (e.loaded / e.total) * 100;
               progressBar.style.width = pct + "%";
+              progressBar.setAttribute("aria-valuenow", String(Math.round(pct)));
               progressLabel.textContent =
                 pct >= 100 ? "Finalizing…" : `${pct.toFixed(0)}% · ${formatSize(e.loaded)} / ${formatSize(e.total)}`;
             }
           };
+          xhr.ontimeout = () => reject(new Error("Upload timed out after 5 minutes — try a smaller file or a faster connection."));
           xhr.onload = () =>
             xhr.status >= 200 && xhr.status < 300
               ? resolve()
@@ -415,11 +490,11 @@
             currentFile = null;
             input.value = "";
             fileBox.classList.remove("show");
-            uploadBtn.disabled = true;
-            uploadBtn.textContent = "Upload";
+            setUploading(false);
             progress.classList.remove("show");
             progressLabel.classList.remove("show");
             progressBar.style.width = "0%";
+            progressBar.setAttribute("aria-valuenow", "0");
             copyBtn.classList.remove("done");
             copyBtn.textContent = "Copy";
             // Best-effort auto-copy on success.
@@ -431,11 +506,12 @@
           (err) => {
             progress.classList.remove("show");
             progressLabel.classList.remove("show");
-            uploadBtn.disabled = false;
-            uploadBtn.textContent = "Upload";
+            setUploading(false);
             showError(err.message || "Upload failed.");
           },
-        );
+        ).finally(() => {
+          activeXhr = null;
+        });
       }
 
       uploadBtn.addEventListener("click", upload);

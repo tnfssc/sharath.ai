@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect } from 'react'
+import { useEffect, useLayoutEffect } from "react";
 
 /**
  * Module-level scroll-state for the blog index page.
@@ -22,24 +22,24 @@ import { useEffect, useLayoutEffect } from 'react'
  * restore-on-mount effect and a rAF-throttled scroll listener that persists
  * the position as the user scrolls. The listener is removed on unmount.
  */
-let savedBlogScroll = 0
+let savedBlogScroll = 0;
 
 export function useBlogScrollRestoration(): void {
-  useLayoutEffect(() => {
-    if (savedBlogScroll > 0) window.scrollTo(0, savedBlogScroll)
-  }, [])
+	useLayoutEffect(() => {
+		if (savedBlogScroll > 0) window.scrollTo(0, savedBlogScroll);
+	}, []);
 
-  useEffect(() => {
-    let ticking = false
-    const onScroll = () => {
-      if (ticking) return
-      ticking = true
-      requestAnimationFrame(() => {
-        savedBlogScroll = window.scrollY
-        ticking = false
-      })
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+	useEffect(() => {
+		let ticking = false;
+		const onScroll = () => {
+			if (ticking) return;
+			ticking = true;
+			requestAnimationFrame(() => {
+				savedBlogScroll = window.scrollY;
+				ticking = false;
+			});
+		};
+		window.addEventListener("scroll", onScroll, { passive: true });
+		return () => window.removeEventListener("scroll", onScroll);
+	}, []);
 }

@@ -117,23 +117,12 @@
     clip-path: inset(0 0 0 0);
   }
 }
-/* Invert the white logo on light themes. daisyUI sets color-scheme on <html>. */
-:root[color-scheme="light"] .logo-invert-light,
-[data-theme="light"] .logo-invert-light,
-[data-theme="cupcake"] .logo-invert-light,
-[data-theme="bumblebee"] .logo-invert-light,
-[data-theme="emerald"] .logo-invert-light,
-[data-theme="corporate"] .logo-invert-light,
-[data-theme="garden"] .logo-invert-light,
-[data-theme="pastel"] .logo-invert-light,
-[data-theme="fantasy"] .logo-invert-light,
-[data-theme="wireframe"] .logo-invert-light,
-[data-theme="cmyk"] .logo-invert-light,
-[data-theme="autumn"] .logo-invert-light,
-[data-theme="lemonade"] .logo-invert-light,
-[data-theme="winter"] .logo-invert-light,
-[data-theme="caramellatte"] .logo-invert-light,
-[data-theme="silk"] .logo-invert-light {
+/* Invert the white logo on light themes. daisyUI sets `color-scheme: light`
+ * on :root for every built-in light theme (verified: light, nord, lofi,
+ * cupcake, … silk all declare it in their theme object), so a single
+ * attribute selector covers them all — including nord/lofi, which the old
+ * per-theme list omitted. */
+:root[color-scheme="light"] .logo-invert-light {
   filter: invert(1);
 }
 /* Primary-tinted text selection. Smooth anchor scroll is handled by JS
@@ -222,9 +211,16 @@
 /* ── Reduced motion: disable everything ── */
 @media (prefers-reduced-motion: reduce) {
   .content-enter,
-  ::view-transition-old(root),
-  ::view-transition-new(root),
+  ::view-transition-old(*),
+  ::view-transition-new(*),
   ::view-transition-group(*) {
     animation: none;
+  }
+  /* The animated underline is a `transition`, not an `animation`, so it
+   * needs its own suppression. Render it in its settled (drawn) state so
+   * the affordance is still visible without motion. */
+  .link-draw {
+    transition: none;
+    background-size: 100% 1px;
   }
 }

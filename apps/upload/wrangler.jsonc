@@ -4,7 +4,11 @@
   "main": "src/index.ts",
   "compatibility_date": "2026-07-04",
   "compatibility_flags": ["nodejs_compat"],
-  "workers_dev": true,
+  // workers_dev disabled: the presign endpoint is unauthenticated, so a public
+  // *.workers.dev URL would let anyone mint R2 PUT URLs. Auth is enforced by
+  // upstream Cloudflare Access (Zero Trust) on the canonical upload.sharath.uk
+  // domain, which fronts this worker. See apps/upload/r2-cors.json for origins.
+  "workers_dev": false,
   "preview_urls": false,
   "assets": {
     "directory": "./public"

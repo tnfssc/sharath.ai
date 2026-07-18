@@ -1,4 +1,4 @@
-import { motion, useScroll, useSpring } from "motion/react";
+import { motion, useReducedMotion, useScroll, useSpring } from "motion/react";
 import { useRef } from "react";
 import { MagicLink } from "#/components/magic-link";
 import { Reveal } from "#/components/reveal";
@@ -251,10 +251,13 @@ export function Timeline() {
 	});
 
 	return (
-		<section className="px-6 py-24 md:px-8">
+		<section aria-labelledby="timeline-heading" className="px-6 py-24 md:px-8">
 			<div className="mx-auto max-w-2xl">
 				<Reveal>
-					<h2 className="mb-10 text-2xl font-medium tracking-tight md:text-3xl">
+					<h2
+						id="timeline-heading"
+						className="mb-10 text-2xl font-medium tracking-tight md:text-3xl"
+					>
 						Experience
 					</h2>
 				</Reveal>
@@ -267,49 +270,64 @@ export function Timeline() {
 						style={{ scaleY, height: "calc(100% - 16px)" }}
 					/>
 					{jobs.map((job, i) => (
-						<motion.li
-							key={job.company}
-							className="relative mb-12 pl-8 last:mb-0"
-							initial={{ opacity: 0, x: -16 }}
-							transition={{ delay: i * 0.07, duration: 0.5, ease: EASE }}
-							viewport={{ margin: "-60px", once: true }}
-							whileInView={{ opacity: 1, x: 0 }}
-						>
-							<span
-								aria-hidden
-								className="absolute top-1.5 left-0 size-2.5 rounded-full bg-primary ring-4 ring-base-100"
-							/>
-							<div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-								<MagicLink
-									href={job.href}
-									rel="noreferrer"
-									target="_blank"
-									className="text-lg font-medium hover:text-primary"
-								>
-									{job.company}
-								</MagicLink>
-								<span className="text-xs text-base-content/65">
-									{job.period}
-								</span>
-							</div>
-							<p className="mb-3 text-sm text-base-content/70">{job.role}</p>
-							<ul className="space-y-2">
-								{job.items.map((item) => (
-									<li key={item.title} className="text-sm">
-										<span className="font-medium">{item.title}</span>
-										<span className="text-base-content/60">
-											: {item.description}
-										</span>
-										<p className="mt-0.5 text-xs text-base-content/60">
-											{item.tags.join(" · ")}
-										</p>
-									</li>
-								))}
-							</ul>
-						</motion.li>
+						<TimelineJob key={job.company} job={job} index={i} />
 					))}
 				</ol>
 			</div>
 		</section>
+	);
+}
+
+function TimelineJob({ job, index }: { job: Job; index: number }) {
+	const reduce = useReducedMotion();
+
+	const content = (
+		<>
+			<span
+				aria-hidden
+				className="absolute top-1.5 left-0 size-2.5 rounded-full bg-primary ring-4 ring-base-100"
+			/>
+			<div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+				<h3 className="text-lg font-medium">
+					<MagicLink
+						href={job.href}
+						rel="noreferrer"
+						target="_blank"
+						className="hover:text-primary"
+					>
+						{job.company}
+					</MagicLink>
+				</h3>
+				<span className="text-xs text-base-content/65">{job.period}</span>
+			</div>
+			<p className="mb-3 text-sm text-base-content/70">{job.role}</p>
+			<ul className="space-y-2">
+				{job.items.map((item) => (
+					<li key={item.title} className="text-sm">
+						<span className="font-medium">{item.title}</span>
+						<span className="text-base-content/60">: {item.description}</span>
+						<p className="mt-0.5 text-xs text-base-content/60">
+							{item.tags.join(" · ")}
+						</p>
+					</li>
+				))}
+			</ul>
+		</>
+	);
+
+	if (reduce) {
+		return <li className="relative mb-12 pl-8 last:mb-0">{content}</li>;
+	}
+
+	return (
+		<motion.li
+			className="relative mb-12 pl-8 last:mb-0"
+			initial={{ opacity: 0, x: -16 }}
+			transition={{ delay: index * 0.07, duration: 0.5, ease: EASE }}
+			viewport={{ margin: "-60px", once: true }}
+			whileInView={{ opacity: 1, x: 0 }}
+		>
+			{content}
+		</motion.li>
 	);
 }

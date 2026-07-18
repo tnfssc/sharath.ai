@@ -1,14 +1,17 @@
-import { useRef, type MouseEvent, type ReactNode } from 'react'
+import { Play, Square } from "lucide-react";
 import {
-  motion,
-  useMotionValue,
-  useSpring,
-  useReducedMotion,
-  AnimatePresence,
-} from 'motion/react'
-import { Play, Square } from 'lucide-react'
+	AnimatePresence,
+	motion,
+	useMotionValue,
+	useReducedMotion,
+	useSpring,
+} from "motion/react";
+import { type MouseEvent, type ReactNode, useRef } from "react";
 
-const EASE = [0.16, 1, 0.3, 1] as const
+const EASE = [0.16, 1, 0.3, 1] as const;
+const ENTER_EXIT = { duration: 0.25, ease: EASE } as const;
+const ICON_SWAP = { duration: 0.15, ease: EASE } as const;
+const INSTANT = { duration: 0 } as const;
 
 /**
  * A small badge with a play icon that follows the cursor inside its parent
@@ -24,100 +27,125 @@ const EASE = [0.16, 1, 0.3, 1] as const
  * parent's onClick handler.
  */
 export function PointerHint({
-  visible,
-  clickedCounter,
-  playing,
-  children,
+	visible,
+	clickedCounter,
+	playing,
+	children,
 }: {
-  visible: boolean
-  clickedCounter: number
-  playing: boolean
-  children?: ReactNode
+	visible: boolean;
+	clickedCounter: number;
+	playing: boolean;
+	children?: ReactNode;
 }) {
-  const ref = useRef<HTMLSpanElement>(null)
-  const reduce = useReducedMotion()
+	const ref = useRef<HTMLSpanElement>(null);
+	const reduce = useReducedMotion();
 
-  // Track cursor position relative to container (in px).
-  const x = useMotionValue(0)
-  const y = useMotionValue(0)
-  const sx = useSpring(x, { stiffness: 200, damping: 18, mass: 0.4 })
-  const sy = useSpring(y, { stiffness: 200, damping: 18, mass: 0.4 })
+	// Track cursor position relative to container (in px).
+	const x = useMotionValue(0);
+	const y = useMotionValue(0);
+	const sx = useSpring(x, { stiffness: 200, damping: 18, mass: 0.4 });
+	const sy = useSpring(y, { stiffness: 200, damping: 18, mass: 0.4 });
 
-  function onMouseMove(e: MouseEvent<HTMLSpanElement>) {
-    if (reduce || !ref.current) return
-    const r = ref.current.getBoundingClientRect()
-    x.set(e.clientX - r.left)
-    y.set(e.clientY - r.top)
-  }
+	// Seed x/y from the cursor on enter so the first show doesn't spring in
+	// from (0,0) at the top-left corner of the tracking zone.
+	function onMouseEnter(e: MouseEvent<HTMLSpanElement>) {
+		if (!ref.current) return;
+		const r = ref.current.getBoundingClientRect();
+		x.set(e.clientX - r.left);
+		y.set(e.clientY - r.top);
+	}
 
-  return (
-    <span ref={ref} className="absolute inset-0 z-30" onMouseMove={onMouseMove}>
-      <AnimatePresence>
-        {visible && (
-          <motion.span
-            className="pointer-events-none absolute flex items-center justify-center"
-            style={{ left: sx, top: sy, x: '-50%', y: '-50%' }}
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: EASE }}
-          >
-            <Badge clicked={clickedCounter > 0} clickKey={clickedCounter} playing={playing}>
-              {children}
-            </Badge>
-          </motion.span>
-        )}
-      </AnimatePresence>
-    </span>
-  )
+	function onMouseMove(e: MouseEvent<HTMLSpanElement>) {
+		if (reduce || !ref.current) return;
+		const r = ref.current.getBoundingClientRect();
+		x.set(e.clientX - r.left);
+		y.set(e.clientY - r.top);
+	}
+
+	return (
+		<span
+			ref={ref}
+			className="absolute inset-0 z-30"
+			onMouseMove={onMouseMove}
+			onMouseEnter={onMouseEnter}
+		>
+			<AnimatePresence>
+				{visible && (
+					<motion.span
+						aria-hidden="true"
+						className="pointer-events-none absolute flex items-center justify-center"
+						style={{ left: sx, top: sy, x: "-50%", y: "-50%" }}
+						initial={{ scale: 0, opacity: 0 }}
+						animate={{ scale: 1, opacity: 1 }}
+						exit={{ scale: 0, opacity: 0 }}
+						transition={reduce ? INSTANT : ENTER_EXIT}
+					>
+						<Badge
+							reduce={reduce}
+							clicked={clickedCounter > 0}
+							clickKey={clickedCounter}
+							playing={playing}
+						>
+							{children}
+						</Badge>
+					</motion.span>
+				)}
+			</AnimatePresence>
+		</span>
+	);
 }
 
 function Badge({
-  clicked,
-  clickKey,
-  playing,
-  children,
+	reduce,
+	clicked,
+	clickKey,
+	playing,
+	children,
 }: {
-  clicked: boolean
-  clickKey: number
-  playing: boolean
-  children?: ReactNode
+	reduce: boolean | null;
+	clicked: boolean;
+	clickKey: number;
+	playing: boolean;
+	children?: ReactNode;
 }) {
-  return (
-    <span className="relative flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-content shadow-sm">
-      <AnimatePresence mode="wait" initial={false}>
-        {playing ? (
-          <motion.span
-            key="stop"
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
-            transition={{ duration: 0.15, ease: EASE }}
-          >
-            <Square className="size-3 fill-current" />
-          </motion.span>
-        ) : (
-          <motion.span
-            key="play"
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
-            transition={{ duration: 0.15, ease: EASE }}
-          >
-            <Play className="size-3 fill-current" />
-          </motion.span>
-        )}
-      </AnimatePresence>
-      {clicked && (
-        <motion.span
-          key={clickKey}
-          className="absolute inset-0 rounded-full ring-2 ring-primary"
-          initial={{ scale: 1, opacity: 0.7 }}
-          animate={{ scale: 2.4, opacity: 0 }}
-          transition={{ duration: 0.6, ease: EASE }}
-        />
-      )}
-      {children}
-    </span>
-  )
+	return (
+		<span
+			aria-hidden="true"
+			className="relative flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-content shadow-sm"
+		>
+			<AnimatePresence mode="wait" initial={false}>
+				{playing ? (
+					<motion.span
+						key="stop"
+						initial={{ scale: 0, opacity: 0 }}
+						animate={{ scale: 1, opacity: 1 }}
+						exit={{ scale: 0, opacity: 0 }}
+						transition={reduce ? INSTANT : ICON_SWAP}
+					>
+						<Square className="size-3 fill-current" />
+					</motion.span>
+				) : (
+					<motion.span
+						key="play"
+						initial={{ scale: 0, opacity: 0 }}
+						animate={{ scale: 1, opacity: 1 }}
+						exit={{ scale: 0, opacity: 0 }}
+						transition={reduce ? INSTANT : ICON_SWAP}
+					>
+						<Play className="size-3 fill-current" />
+					</motion.span>
+				)}
+			</AnimatePresence>
+			{clicked && !reduce && (
+				<motion.span
+					key={clickKey}
+					className="absolute inset-0 rounded-full ring-2 ring-primary"
+					initial={{ scale: 1, opacity: 0.7 }}
+					animate={{ scale: 2.4, opacity: 0 }}
+					transition={{ duration: 0.6, ease: EASE }}
+				/>
+			)}
+			{children}
+		</span>
+	);
 }

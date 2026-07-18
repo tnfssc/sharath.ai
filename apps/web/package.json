@@ -19,7 +19,6 @@
     "@cloudflare/vite-plugin": "^1.43.0",
     "@content-collections/core": "^0.13.1",
     "@content-collections/vite": "^0.3.0",
-    "@convex-dev/react-query": "0.1.0",
     "@faker-js/faker": "^10.3.0",
     "@posthog/react": "^1.7.0",
     "@radix-ui/react-slot": "^1.2.0",

@@ -17,7 +17,7 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
 import appCss from '../styles.css?url'
 
-import { seo } from '../lib/seo'
+import { canonicalLink, seo } from '../lib/seo'
 
 import type { QueryClient } from '@tanstack/react-query'
 
@@ -45,9 +45,11 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         title: 'sharath.ai',
         description:
           "Sharath — software engineer building AI agents, developer tools, and things that ship.",
+        url: 'https://sharath.ai',
       }),
     ],
     links: [
+      canonicalLink('https://sharath.ai'),
       {
         rel: 'stylesheet',
         href: appCss,

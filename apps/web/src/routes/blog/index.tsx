@@ -2,7 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 
 import { getAllPosts, slugOf } from '#/lib/blog'
 import { useBlogScrollRestoration } from '#/lib/blog-scroll'
-import { seo } from '#/lib/seo'
+import { canonicalLink, seo } from '#/lib/seo'
 
 export const Route = createFileRoute('/blog/')({
   head: () => ({
@@ -10,8 +10,10 @@ export const Route = createFileRoute('/blog/')({
       ...seo({
         title: 'Blog — sharath.ai',
         description: 'Writing about AI agents, developer tools, and shipping.',
+        url: 'https://sharath.ai/blog',
       }),
     ],
+    links: [canonicalLink('https://sharath.ai/blog')],
   }),
   component: BlogIndex,
 })

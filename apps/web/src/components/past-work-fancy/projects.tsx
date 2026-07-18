@@ -1,10 +1,17 @@
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { Magnetic } from "#/components/magnetic";
 import { Reveal } from "#/components/reveal";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-const projects = [
+interface Project {
+	name: string;
+	href: string;
+	description: string;
+	tags: string[];
+}
+
+const projects: Project[] = [
 	{
 		name: "AtomR",
 		href: "https://atom.sharath.uk",
@@ -50,7 +57,34 @@ const projects = [
 	},
 ];
 
+const itemClassName = "py-5 first:pt-0 last:pb-0";
+
+function ProjectLink({ project }: { project: Project }) {
+	return (
+		<a
+			className="group block focus-visible:outline-2 focus-visible:outline-offset-4"
+			href={project.href}
+			rel="noreferrer"
+			target="_blank"
+		>
+			<Magnetic>
+				<span className="font-display text-lg font-medium link-draw group-hover:text-primary">
+					{project.name}
+				</span>
+			</Magnetic>
+			<p className="mt-1 text-sm text-base-content/60 transition-colors group-hover:text-base-content">
+				{project.description}
+			</p>
+			<p className="mt-1.5 text-xs text-base-content/60 transition-colors group-hover:text-base-content/90">
+				{project.tags.join(" · ")}
+			</p>
+		</a>
+	);
+}
+
 export function Projects() {
+	const reduce = useReducedMotion();
+
 	return (
 		<section className="px-6 py-20 md:px-8">
 			<div className="mx-auto max-w-2xl">
@@ -60,33 +94,26 @@ export function Projects() {
 					</h2>
 				</Reveal>
 
-				<div className="divide-y divide-base-300">
-					{projects.map((project, i) => (
-						<motion.a
-							key={project.name}
-							className="group block py-5 first:pt-0 last:pb-0"
-							href={project.href}
-							initial={{ opacity: 0, y: 16 }}
-							rel="noreferrer"
-							target="_blank"
-							transition={{ delay: i * 0.06, duration: 0.5, ease: EASE }}
-							viewport={{ margin: "-60px", once: true }}
-							whileInView={{ opacity: 1, y: 0 }}
-						>
-							<Magnetic>
-								<span className="font-display text-lg font-medium link-draw group-hover:text-primary">
-									{project.name}
-								</span>
-							</Magnetic>
-							<p className="mt-1 text-sm text-base-content/60 transition-colors group-hover:text-base-content">
-								{project.description}
-							</p>
-							<p className="mt-1.5 text-xs text-base-content/60 transition-colors group-hover:text-base-content/90">
-								{project.tags.join(" · ")}
-							</p>
-						</motion.a>
-					))}
-				</div>
+				<ul className="divide-y divide-base-300">
+					{projects.map((project, i) =>
+						reduce ? (
+							<li key={project.name} className={itemClassName}>
+								<ProjectLink project={project} />
+							</li>
+						) : (
+							<motion.li
+								key={project.name}
+								className={itemClassName}
+								initial={{ opacity: 0, y: 16 }}
+								transition={{ delay: i * 0.06, duration: 0.5, ease: EASE }}
+								viewport={{ margin: "-60px", once: true }}
+								whileInView={{ opacity: 1, y: 0 }}
+							>
+								<ProjectLink project={project} />
+							</motion.li>
+						),
+					)}
+				</ul>
 			</div>
 		</section>
 	);

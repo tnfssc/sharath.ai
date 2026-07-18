@@ -64,9 +64,6 @@ importers:
       '@content-collections/vite':
         specifier: ^0.3.0
         version: 0.3.0(@content-collections/core@0.13.1(typescript@6.0.3))(vite@8.1.3(@types/node@22.20.0)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
-      '@convex-dev/react-query':
-        specifier: 0.1.0
-        version: 0.1.0(@tanstack/react-query@5.101.2(react@19.2.7))(convex@1.42.1(react@19.2.7))
       '@posthog/react':
         specifier: ^1.7.0
         version: 1.10.3(@types/react@19.2.17)(posthog-js@1.396.6)(react@19.2.7)
@@ -79,9 +76,6 @@ importers:
       '@sharath/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
-      '@t3-oss/env-core':
-        specifier: ^0.13.10
-        version: 0.13.11(typescript@6.0.3)(zod@4.4.3)
       '@tailwindcss/typography':
         specifier: ^0.5.16
         version: 0.5.20(tailwindcss@4.3.2)
@@ -114,7 +108,7 @@ importers:
         version: 1.167.1(@tanstack/query-core@5.101.2)(@tanstack/react-query@5.101.2(react@19.2.7))(@tanstack/react-router@1.170.18(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(@tanstack/router-core@1.171.14)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@tanstack/react-start':
         specifier: latest
-        version: 1.168.28(crossws@0.4.9(srvx@0.11.20))(esbuild@0.28.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(rolldown@1.2.0)(vite@8.1.3(@types/node@22.20.0)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
+        version: 1.168.28(crossws@0.4.9(srvx@0.11.22))(esbuild@0.28.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(rolldown@1.2.0)(vite@8.1.3(@types/node@22.20.0)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
       '@tanstack/router-cli':
         specifier: ^1.132.0
         version: 1.167.18
@@ -142,9 +136,6 @@ importers:
       babel-plugin-react-compiler:
         specifier: ^1.0.0
         version: 1.0.0
-      clsx:
-        specifier: ^2.1.1
-        version: 2.1.1
       convex:
         specifier: ^1.32.0
         version: 1.42.1(react@19.2.7)
@@ -172,15 +163,15 @@ importers:
       react-dom:
         specifier: ^19.2.0
         version: 19.2.7(react@19.2.7)
-      tailwind-merge:
-        specifier: ^3.0.2
-        version: 3.6.0
       tailwindcss:
         specifier: ^4.1.18
         version: 4.3.2
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@4.3.2)
+      tw-animate-css:
+        specifier: ^1.3.6
+        version: 1.4.0
       typescript:
         specifier: ^6.0.2
         version: 6.0.3
@@ -422,12 +413,6 @@ packages:
     peerDependencies:
       '@content-collections/core': ^0.x
       vite: ^6 || ^7 || ^8
-
-  '@convex-dev/react-query@0.1.0':
-    resolution: {integrity: sha512-ULmBZCtAQDUePdBhUv7hj1Yy4QiCelhi6uEIOtMpjW8db6W9CFKvQwLt9heLngccFyMFfAZdOfSrT+cP4AH0Jw==}
-    peerDependencies:
-      '@tanstack/react-query': ^5.0.0
-      convex: ^1.29.3
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -1437,8 +1422,22 @@ packages:
     os: [linux]
     libc: [glibc]
 
+  '@rolldown/binding-linux-ppc64-gnu@1.2.0':
+    resolution: {integrity: sha512-9DtF35qR9/NrfhM4oxLplCzVVjE+KKm8Pjemi0i/sdhAWkUasjmSo8WTTubNJClhSHCfyk2yeyoXDQEDPtDAAw==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [ppc64]
+    os: [linux]
+    libc: [glibc]
+
   '@rolldown/binding-linux-s390x-gnu@1.1.4':
     resolution: {integrity: sha512-0WIRnL1Uw4BvTZRLQt+PVgo6ZKTJadlC2btP+/EOXv2f/DWbY0rEgl+y834mIVwP1FkTlWVTrGGJXf12lru7EQ==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [s390x]
+    os: [linux]
+    libc: [glibc]
+
+  '@rolldown/binding-linux-s390x-gnu@1.2.0':
+    resolution: {integrity: sha512-RzuHrBh8X8Hntd2N4VR02QGEciq/9JhcZoTpR/Cee6otRrlILGCf3cg2ygHuih+ZebUnWmMrDX6ITI85btO6rQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [s390x]
     os: [linux]
@@ -1474,6 +1473,12 @@ packages:
 
   '@rolldown/binding-openharmony-arm64@1.1.4':
     resolution: {integrity: sha512-KXMGoboq5cyaCQjDA4GLuRiOwBQ0EyFnJoVViLeZ45/3rFItRODEr+NdsBcVpll40hhNArlm/speWGRvj08LzA==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [arm64]
+    os: [openharmony]
+
+  '@rolldown/binding-openharmony-arm64@1.2.0':
+    resolution: {integrity: sha512-/6VFMQGRmrhP77KXDC+StIxGzcNp5JOIyYtw0CQ8gPlzhpiIRucYfoM5FaFamHd5BJYIdH86yfP46l1p3WdrFA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [arm64]
     os: [openharmony]
@@ -1571,23 +1576,6 @@ packages:
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
-
-  '@t3-oss/env-core@0.13.11':
-    resolution: {integrity: sha512-sM7GYY+KL7H/Hl0BE0inWfk3nRHZOLhmVn7sHGxaZt9FAR6KqREXAE+6TqKfiavfXmpRxO/OZ2QgKRd+oiBYRQ==}
-    peerDependencies:
-      arktype: ^2.1.0
-      typescript: '>=5.0.0'
-      valibot: ^1.0.0-beta.7 || ^1.0.0
-      zod: ^3.24.0 || ^4.0.0
-    peerDependenciesMeta:
-      arktype:
-        optional: true
-      typescript:
-        optional: true
-      valibot:
-        optional: true
-      zod:
-        optional: true
 
   '@tailwindcss/node@4.3.2':
     resolution: {integrity: sha512-yWP/sqEcBLaD8JuA6zNwxoYKr75qxTioYwlRwekj5Jr/I5GXnoJfjetH/psLUIv74cYTH2lBUEzBkinthoYcBg==}
@@ -2929,9 +2917,6 @@ packages:
   symbol-tree@3.2.4:
     resolution: {integrity: sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==}
 
-  tailwind-merge@3.6.0:
-    resolution: {integrity: sha512-uxL7qAVQriqRQPAyK3pj66VqskWqoZ37PW94jwOTwNfq/z9oyu1V+eqrZqtR2+fCiXdYOZe/Modt8GtvqNzu+w==}
-
   tailwindcss-animate@1.0.7:
     resolution: {integrity: sha512-bl6mpH3T7I3UFxuvDEXLxy/VuFxBk5bbzplh7tXI68mwMokNYd1t9qPBHlnyTwfa4JGC4zP516I1hYYtQ/vspA==}
     peerDependencies:
@@ -2980,6 +2965,9 @@ packages:
   turbo@2.10.3:
     resolution: {integrity: sha512-uZIqzfgtWbyqu1Tqwdd0giRnPGgL0ejbcdF8eZLJhtTTVSrOgArZGzYeXTD6XNcc7ANgdhqex11Y9bHBeyiQLQ==}
     hasBin: true
+
+  tw-animate-css@1.4.0:
+    resolution: {integrity: sha512-7bziOlRqH0hJx80h/3mbicLW7o8qLsH5+RaLR2t+OHM3D0JlWGODQKQ4cxbK7WlvmUxpcj6Kgu6EKqjrGFe3QQ==}
 
   typescript@6.0.3:
     resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
@@ -3553,11 +3541,6 @@ snapshots:
       '@content-collections/core': 0.13.1(typescript@6.0.3)
       '@content-collections/integrations': 0.5.0(@content-collections/core@0.13.1(typescript@6.0.3))
       vite: 8.1.3(@types/node@22.20.0)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0)
-
-  '@convex-dev/react-query@0.1.0(@tanstack/react-query@5.101.2(react@19.2.7))(convex@1.42.1(react@19.2.7))':
-    dependencies:
-      '@tanstack/react-query': 5.101.2(react@19.2.7)
-      convex: 1.42.1(react@19.2.7)
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
@@ -4173,7 +4156,13 @@ snapshots:
   '@rolldown/binding-linux-ppc64-gnu@1.1.4':
     optional: true
 
+  '@rolldown/binding-linux-ppc64-gnu@1.2.0':
+    optional: true
+
   '@rolldown/binding-linux-s390x-gnu@1.1.4':
+    optional: true
+
+  '@rolldown/binding-linux-s390x-gnu@1.2.0':
     optional: true
 
   '@rolldown/binding-linux-x64-gnu@1.1.4':
@@ -4189,6 +4178,9 @@ snapshots:
     optional: true
 
   '@rolldown/binding-openharmony-arm64@1.1.4':
+    optional: true
+
+  '@rolldown/binding-openharmony-arm64@1.2.0':
     optional: true
 
   '@rolldown/binding-wasm32-wasi@1.1.4':
@@ -4267,11 +4259,6 @@ snapshots:
   '@speed-highlight/core@1.2.17': {}
 
   '@standard-schema/spec@1.1.0': {}
-
-  '@t3-oss/env-core@0.13.11(typescript@6.0.3)(zod@4.4.3)':
-    optionalDependencies:
-      typescript: 6.0.3
-      zod: 4.4.3
 
   '@tailwindcss/node@4.3.2':
     dependencies:
@@ -4469,15 +4456,15 @@ snapshots:
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
 
-  '@tanstack/react-start-rsc@0.1.27(crossws@0.4.9(srvx@0.11.20))(esbuild@0.28.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(rolldown@1.2.0)(vite@8.1.3(@types/node@22.20.0)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))':
+  '@tanstack/react-start-rsc@0.1.27(crossws@0.4.9(srvx@0.11.22))(esbuild@0.28.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(rolldown@1.2.0)(vite@8.1.3(@types/node@22.20.0)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))':
     dependencies:
       '@tanstack/react-router': 1.170.18(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@tanstack/router-core': 1.171.15
       '@tanstack/router-utils': 1.162.2
       '@tanstack/start-client-core': 1.170.14
       '@tanstack/start-fn-stubs': 1.162.0
-      '@tanstack/start-plugin-core': 1.171.20(@tanstack/react-router@1.170.18(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(crossws@0.4.9(srvx@0.11.20))(esbuild@0.28.1)(rolldown@1.2.0)(vite@8.1.3(@types/node@22.20.0)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
-      '@tanstack/start-server-core': 1.169.17(crossws@0.4.9(srvx@0.11.20))
+      '@tanstack/start-plugin-core': 1.171.20(@tanstack/react-router@1.170.18(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(crossws@0.4.9(srvx@0.11.22))(esbuild@0.28.1)(rolldown@1.2.0)(vite@8.1.3(@types/node@22.20.0)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
+      '@tanstack/start-server-core': 1.169.17(crossws@0.4.9(srvx@0.11.22))
       '@tanstack/start-storage-context': 1.167.17
       pathe: 2.0.3
       react: 19.2.7
@@ -4496,26 +4483,26 @@ snapshots:
       - vite-plugin-solid
       - webpack
 
-  '@tanstack/react-start-server@1.167.22(crossws@0.4.9(srvx@0.11.20))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
+  '@tanstack/react-start-server@1.167.22(crossws@0.4.9(srvx@0.11.22))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
     dependencies:
       '@tanstack/react-router': 1.170.18(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@tanstack/router-core': 1.171.15
-      '@tanstack/start-server-core': 1.169.17(crossws@0.4.9(srvx@0.11.20))
+      '@tanstack/start-server-core': 1.169.17(crossws@0.4.9(srvx@0.11.22))
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
     transitivePeerDependencies:
       - crossws
 
-  '@tanstack/react-start@1.168.28(crossws@0.4.9(srvx@0.11.20))(esbuild@0.28.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(rolldown@1.2.0)(vite@8.1.3(@types/node@22.20.0)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))':
+  '@tanstack/react-start@1.168.28(crossws@0.4.9(srvx@0.11.22))(esbuild@0.28.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(rolldown@1.2.0)(vite@8.1.3(@types/node@22.20.0)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))':
     dependencies:
       '@tanstack/react-router': 1.170.18(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@tanstack/react-start-client': 1.168.16(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@tanstack/react-start-rsc': 0.1.27(crossws@0.4.9(srvx@0.11.20))(esbuild@0.28.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(rolldown@1.2.0)(vite@8.1.3(@types/node@22.20.0)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
-      '@tanstack/react-start-server': 1.167.22(crossws@0.4.9(srvx@0.11.20))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@tanstack/react-start-rsc': 0.1.27(crossws@0.4.9(srvx@0.11.22))(esbuild@0.28.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(rolldown@1.2.0)(vite@8.1.3(@types/node@22.20.0)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
+      '@tanstack/react-start-server': 1.167.22(crossws@0.4.9(srvx@0.11.22))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@tanstack/router-utils': 1.162.2
       '@tanstack/start-client-core': 1.170.14
-      '@tanstack/start-plugin-core': 1.171.20(@tanstack/react-router@1.170.18(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(crossws@0.4.9(srvx@0.11.20))(esbuild@0.28.1)(rolldown@1.2.0)(vite@8.1.3(@types/node@22.20.0)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
-      '@tanstack/start-server-core': 1.169.17(crossws@0.4.9(srvx@0.11.20))
+      '@tanstack/start-plugin-core': 1.171.20(@tanstack/react-router@1.170.18(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(crossws@0.4.9(srvx@0.11.22))(esbuild@0.28.1)(rolldown@1.2.0)(vite@8.1.3(@types/node@22.20.0)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
+      '@tanstack/start-server-core': 1.169.17(crossws@0.4.9(srvx@0.11.22))
       pathe: 2.0.3
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
@@ -4673,7 +4660,7 @@ snapshots:
 
   '@tanstack/start-fn-stubs@1.162.0': {}
 
-  '@tanstack/start-plugin-core@1.171.20(@tanstack/react-router@1.170.18(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(crossws@0.4.9(srvx@0.11.20))(esbuild@0.28.1)(rolldown@1.2.0)(vite@8.1.3(@types/node@22.20.0)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))':
+  '@tanstack/start-plugin-core@1.171.20(@tanstack/react-router@1.170.18(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(crossws@0.4.9(srvx@0.11.22))(esbuild@0.28.1)(rolldown@1.2.0)(vite@8.1.3(@types/node@22.20.0)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))':
     dependencies:
       '@babel/code-frame': 7.27.1
       '@babel/core': 7.29.7
@@ -4682,7 +4669,7 @@ snapshots:
       '@tanstack/router-generator': 1.167.19
       '@tanstack/router-plugin': 1.168.20(@tanstack/react-router@1.170.18(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(esbuild@0.28.1)(rolldown@1.2.0)(vite@8.1.3(@types/node@22.20.0)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
       '@tanstack/router-utils': 1.162.2
-      '@tanstack/start-server-core': 1.169.17(crossws@0.4.9(srvx@0.11.20))
+      '@tanstack/start-server-core': 1.169.17(crossws@0.4.9(srvx@0.11.22))
       exsolve: 1.1.0
       lightningcss: 1.32.0
       pathe: 2.0.3
@@ -4711,14 +4698,14 @@ snapshots:
       - vite-plugin-solid
       - webpack
 
-  '@tanstack/start-server-core@1.169.17(crossws@0.4.9(srvx@0.11.20))':
+  '@tanstack/start-server-core@1.169.17(crossws@0.4.9(srvx@0.11.22))':
     dependencies:
       '@tanstack/history': 1.162.0
       '@tanstack/router-core': 1.171.15
       '@tanstack/start-client-core': 1.170.14
       '@tanstack/start-storage-context': 1.167.17
       fetchdts: 0.1.7
-      h3-v2: h3@2.0.1-rc.20(crossws@0.4.9(srvx@0.11.20))
+      h3-v2: h3@2.0.1-rc.20(crossws@0.4.9(srvx@0.11.22))
       seroval: 1.5.4
     transitivePeerDependencies:
       - crossws
@@ -5187,22 +5174,22 @@ snapshots:
       section-matter: 1.0.0
       strip-bom-string: 1.0.0
 
-  h3-rules@0.1.0(h3@2.0.1-rc.25(crossws@0.4.9(srvx@0.11.20)))(ocache@0.2.0):
+  h3-rules@0.1.0(h3@2.0.1-rc.25(crossws@0.4.9(srvx@0.11.22)))(ocache@0.2.0):
     dependencies:
-      h3: 2.0.1-rc.25(crossws@0.4.9(srvx@0.11.20))
+      h3: 2.0.1-rc.25(crossws@0.4.9(srvx@0.11.22))
       rou3: 0.9.1
       ufo: 1.6.4
     optionalDependencies:
       ocache: 0.2.0
 
-  h3@2.0.1-rc.20(crossws@0.4.9(srvx@0.11.20)):
+  h3@2.0.1-rc.20(crossws@0.4.9(srvx@0.11.22)):
     dependencies:
       rou3: 0.8.1
       srvx: 0.11.20
     optionalDependencies:
       crossws: 0.4.9(srvx@0.11.22)
 
-  h3@2.0.1-rc.25(crossws@0.4.9(srvx@0.11.20)):
+  h3@2.0.1-rc.25(crossws@0.4.9(srvx@0.11.22)):
     dependencies:
       rou3: 0.9.1
       srvx: 0.11.22
@@ -5412,8 +5399,8 @@ snapshots:
       crossws: 0.4.9(srvx@0.11.22)
       db0: 0.3.4
       env-runner: 0.1.16(miniflare@4.20260701.0)(wrangler@4.107.0)
-      h3: 2.0.1-rc.25(crossws@0.4.9(srvx@0.11.20))
-      h3-rules: 0.1.0(h3@2.0.1-rc.25(crossws@0.4.9(srvx@0.11.20)))(ocache@0.2.0)
+      h3: 2.0.1-rc.25(crossws@0.4.9(srvx@0.11.22))
+      h3-rules: 0.1.0(h3@2.0.1-rc.25(crossws@0.4.9(srvx@0.11.22)))(ocache@0.2.0)
       hookable: 6.1.1
       nf3: 0.3.22
       ocache: 0.2.0
@@ -5609,8 +5596,11 @@ snapshots:
       '@rolldown/binding-linux-arm-gnueabihf': 1.2.0
       '@rolldown/binding-linux-arm64-gnu': 1.2.0
       '@rolldown/binding-linux-arm64-musl': 1.2.0
+      '@rolldown/binding-linux-ppc64-gnu': 1.2.0
+      '@rolldown/binding-linux-s390x-gnu': 1.2.0
       '@rolldown/binding-linux-x64-gnu': 1.2.0
       '@rolldown/binding-linux-x64-musl': 1.2.0
+      '@rolldown/binding-openharmony-arm64': 1.2.0
       '@rolldown/binding-wasm32-wasi': 1.2.0
       '@rolldown/binding-win32-arm64-msvc': 1.2.0
       '@rolldown/binding-win32-x64-msvc': 1.2.0
@@ -5719,8 +5709,6 @@ snapshots:
   symbol-tree@3.2.4:
     optional: true
 
-  tailwind-merge@3.6.0: {}
-
   tailwindcss-animate@1.0.7(tailwindcss@4.3.2):
     dependencies:
       tailwindcss: 4.3.2
@@ -5768,6 +5756,8 @@ snapshots:
       '@turbo/linux-arm64': 2.10.3
       '@turbo/windows-64': 2.10.3
       '@turbo/windows-arm64': 2.10.3
+
+  tw-animate-css@1.4.0: {}
 
   typescript@6.0.3: {}
 

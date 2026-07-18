@@ -14,7 +14,7 @@ import NotFound from "../components/NotFound";
 import PostHogProvider from "../integrations/posthog/provider";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 
-import { seo } from "../lib/seo";
+import { canonicalLink, seo } from "../lib/seo";
 import { vtState } from "../lib/vt";
 import appCss from "../styles.css?url";
 
@@ -46,9 +46,11 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				title: "sharath.ai",
 				description:
 					"Sharath — software engineer building AI agents, developer tools, and things that ship.",
+				url: "https://sharath.ai",
 			}),
 		],
 		links: [
+			canonicalLink("https://sharath.ai"),
 			{
 				rel: "stylesheet",
 				href: appCss,

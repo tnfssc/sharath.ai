@@ -1,6 +1,7 @@
 {
   "extends": "@sharath/typescript-config/react.json",
   "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["convex/**", ".content-collections", "dist", "node_modules"],
   "compilerOptions": {
     "paths": {
       "#/*": ["./src/*"],

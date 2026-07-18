@@ -12,11 +12,11 @@ export const Route = createFileRoute("/")({
 
 function Home() {
 	return (
-		<div className="min-h-screen">
+		<div>
 			<Hero />
-			<OpenSource />
 			<Timeline />
 			<Projects />
+			<OpenSource />
 			<Skills />
 		</div>
 	);

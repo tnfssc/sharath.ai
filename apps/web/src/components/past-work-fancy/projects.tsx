@@ -14,7 +14,7 @@ interface Project {
 const projects: Project[] = [
 	{
 		name: "AtomR",
-		href: "https://atom.sharath.uk",
+		href: "https://atom.sharath.page",
 		description: "Chain Reaction clone with realtime multiplayer",
 		tags: ["Convex", "Vite", "React", "mise"],
 	},
@@ -51,7 +51,7 @@ const projects: Project[] = [
 	},
 	{
 		name: "Self-hosted",
-		href: "https://www.sharath.uk/self-hosted",
+		href: "https://github.com/tnfssc/self-hosted",
 		description: "Personal VPS cluster running production services",
 		tags: ["Docker Swarm", "Cloudflare Tunnel", "GlusterFS", "SOPS", "Linux"],
 	},

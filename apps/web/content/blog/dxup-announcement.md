@@ -20,7 +20,7 @@ author:
 heroImage: "https://cdn.sharath.uk/20248-i2gmb.png"
 ---
 
-[⬇️ Download Now](https://www.sharath.uk/s/eqmsl)
+[⬇️ Download Now](https://github.com/tnfssc/dxup/releases)
 
 ## ⭐️ What is this?
 
@@ -42,4 +42,4 @@ If you used `asdf`, this is just a GUI wrapper around it.
 
 Most people cannot use `asdf`. Especially beginners. So, I created this app to help them.
 
-[🤝 Contribute](https://www.sharath.uk/s/mivfh)
+[🤝 Contribute](https://github.com/tnfssc/dxup)

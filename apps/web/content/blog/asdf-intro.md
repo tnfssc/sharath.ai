@@ -29,7 +29,7 @@ For me, it was with NodeJS. The frontend uses Node 18. The backend uses Node 16.
 
 ### 🤢 Early solutions.
 
-I had to use Docker to run both of them at the same time. But sometimes, you want get things done quicker. Sometimes you don't want to use the cumbersome Docker development environment. Even if you do set it all up in Docker, you still have install stuff like `build-essential`, `cmake`, `git` etc. You will lose your favorite [pretty terminal (click to learn)](https://ghost.sharath.uk/make-a-pretty-terminal-3/). You also lose your local files to quickly copy paste. This is a hassle.
+I had to use Docker to run both of them at the same time. But sometimes, you want get things done quicker. Sometimes you don't want to use the cumbersome Docker development environment. Even if you do set it all up in Docker, you still have install stuff like `build-essential`, `cmake`, `git` etc. You will lose your favorite [pretty terminal (click to learn)](https://web.archive.org/web/2024/https://ghost.sharath.uk/make-a-pretty-terminal-3/). You also lose your local files to quickly copy paste. This is a hassle.
 
 I learnt about [`nvm` (Node Version Manager)](https://nvm.sh/?ref=www.sca.run). It's a tool to configure different NodeJS environment versions to different projects. You can choose which NodeJS version to run the project on.
 

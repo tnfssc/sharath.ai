@@ -177,7 +177,7 @@ const jobs: Job[] = [
 	},
 	{
 		company: "htOS",
-		href: "https://htos-demo.sharath.uk/",
+		href: "https://web.archive.org/web/2024/https://htos-demo.sharath.uk/",
 		period: "Apr 2022 – Jul 2022",
 		role: "Freelance Lead Developer",
 		items: [

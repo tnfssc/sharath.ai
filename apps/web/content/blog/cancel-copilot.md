@@ -113,4 +113,4 @@ Once you did that, you are ready to go. Just open any code and start typing away
 
 You can now seal off that hole in you credit card.
 
-For advanced use cases, please refer to [continue.dev/docs](https://docs.continue.dev/reference/config?ref=blog.sharath.uk). You can customise a lot of things including the prompts and which models to use.
+For advanced use cases, please refer to [continue.dev/docs](https://docs.continue.dev/reference/config?ref=sharath.ai). You can customise a lot of things including the prompts and which models to use.

@@ -5,8 +5,8 @@
         "origins": [
           "http://localhost:4321",
           "http://localhost:5173",
-          "https://www.sharath.uk",
-          "https://blog.sharath.uk"
+          "https://sharath.ai",
+          "https://www.sharath.ai"
         ],
         "methods": ["GET"]
       }

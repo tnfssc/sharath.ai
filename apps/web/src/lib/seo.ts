@@ -1,3 +1,6 @@
+/** Canonical origin of the site. Single source of truth for absolute URLs (RSS, sitemap, canonical tags). */
+export const SITE_URL = 'https://sharath.ai'
+
 type SeoOptions = {
 	/** Per-page canonical URL; emitted as og:url. For the `<link rel="canonical">` tag, add it to head().links (see canonicalLink). */
 	canonical?: string

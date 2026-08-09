@@ -13,7 +13,7 @@
   "dependencies": {
     "@paralleldrive/cuid2": "^3.3.0",
     "aws4fetch": "^1.0.20",
-    "hono": "^4.12.27"
+    "hono": "^4.12.34"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20260705.1",

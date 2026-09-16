@@ -18,8 +18,8 @@
     "clean": "git clean -xdf node_modules apps/*/node_modules packages/*/node_modules **/.turbo **/dist"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.5",
+    "@biomejs/biome": "2.5.13",
     "@sharath/typescript-config": "workspace:*",
-    "turbo": "^2.5.8"
+    "turbo": "^2.10.13"
   }
 }

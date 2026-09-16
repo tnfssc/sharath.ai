@@ -19,6 +19,8 @@ Personal portfolio + blog for Sharath. Built with TanStack Start, deployed to Cl
 
 ## Getting started
 
+Requires Node.js 22 or newer and the pnpm version pinned in `package.json`.
+
 ```bash
 pnpm install
 pnpm dev          # http://localhost:3000
@@ -30,10 +32,11 @@ pnpm dev          # http://localhost:3000
 |---|---|
 | `pnpm dev` | Start dev server on port 3000 |
 | `pnpm build` | Production build (client + Workers SSR bundle) |
-| `pnpm preview` | Preview the production build locally |
-| `pnpm deploy` | Build + deploy to Cloudflare Workers |
-| `pnpm cf-typegen` | Generate Cloudflare env types via wrangler |
-| `pnpm generate-routes` | Regenerate TanStack route tree |
+| `pnpm --filter @sharath/web preview` | Preview the production build locally |
+| `pnpm --filter @sharath/web deploy` | Build + deploy to Cloudflare Workers |
+| `pnpm --filter @sharath/web cf-typegen` | Generate Cloudflare env types via wrangler |
+| `pnpm --filter @sharath/web generate-routes` | Regenerate TanStack route tree |
+| `pnpm typecheck` | Type-check all workspace apps |
 | `pnpm test` | Run Vitest |
 | `pnpm lint` | Biome lint |
 | `pnpm format` | Biome format |
@@ -44,14 +47,18 @@ pnpm dev          # http://localhost:3000
 Deploying requires a Cloudflare account and wrangler authentication:
 
 ```bash
-npx wrangler login     # one-time
-pnpm deploy            # build + wrangler deploy
+pnpm --filter @sharath/web exec wrangler login # one-time
+pnpm --filter @sharath/web deploy              # build + wrangler deploy
 ```
 
-The `wrangler.jsonc` config uses `nodejs_compat` and points `main` at
+The `apps/web/wrangler.jsonc` config uses `nodejs_compat` and points `main` at
 `@tanstack/react-start/server-entry`.
 
 ## Project structure
+
+The pnpm workspace contains the site in `apps/web`, the upload Worker in
+`apps/upload`, and shared TypeScript settings in `packages/typescript-config`.
+The site directory contains:
 
 ```
 src/
@@ -94,7 +101,7 @@ See [DESIGN.md](./DESIGN.md) for the full design system (type pairing, section t
 
 ## Blog
 
-Posts live in `content/blog/*.md` with frontmatter:
+Posts live in `apps/web/content/blog/*.md` with frontmatter:
 
 ```markdown
 ---

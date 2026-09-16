@@ -7,8 +7,8 @@ export default function DefaultCatchBoundary({
 	reset,
 }: ErrorComponentProps) {
 	const isDev = import.meta.env.DEV;
-	const message = isDev ? error.message : undefined;
-	const stack = isDev && error.stack ? error.stack : undefined;
+	const message = isDev && error instanceof Error ? error.message : undefined;
+	const stack = isDev && error instanceof Error ? error.stack : undefined;
 
 	return (
 		<div

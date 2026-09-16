@@ -21,4 +21,4 @@ const blog = defineCollection({
   }),
 })
 
-export default defineConfig({ collections: [blog] })
+export default defineConfig({ content: [blog] })

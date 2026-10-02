@@ -240,7 +240,7 @@
       }
       .error.show { display: block; }
 
-      [hidden] { display: none !important; }
+      [hidden] { display: none; }
     </style>
   </head>
   <body>
@@ -251,7 +251,7 @@
       </header>
 
       <label class="dropzone" id="dropzone" for="file">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 15V3m0 0L7 8m5-5l5 5" />
           <path d="M5 17v2a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-2" />
         </svg>
@@ -262,7 +262,7 @@
 
       <div class="file" id="fileRow">
         <div class="icon">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z" />
           </svg>
         </div>
@@ -271,7 +271,7 @@
           <div class="size" id="fileSize"></div>
         </div>
         <button class="remove" id="remove" type="button" title="Remove" aria-label="Remove file">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
         </button>
       </div>
 
@@ -287,7 +287,7 @@
 
       <div class="result" id="result" aria-live="polite">
         <div class="title">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5" /></svg>
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5" /></svg>
           Uploaded
         </div>
         <div class="url-row">
@@ -325,14 +325,14 @@
 
       // Prevent the browser from intercepting drops outside the dropzone (which
       // would navigate away from the page instead of uploading the file).
-      ["dragover", "drop"].forEach((ev) =>
-        window.addEventListener(ev, (e) => e.preventDefault(), { passive: false }),
-      );
+      ["dragover", "drop"].forEach((ev) => {
+        window.addEventListener(ev, (e) => e.preventDefault(), { passive: false });
+      });
 
       function formatSize(bytes) {
-        if (bytes < 1024) return bytes + " B";
-        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
-        return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+        if (bytes < 1024) return `${bytes} B`;
+        if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+        return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
       }
 
       function showError(msg) {
@@ -376,21 +376,21 @@
 
       input.addEventListener("change", () => setFile(input.files[0] ?? null));
 
-      ["dragenter", "dragover"].forEach((ev) =>
+      ["dragenter", "dragover"].forEach((ev) => {
         dropzone.addEventListener(ev, (e) => {
           e.preventDefault();
           dropzone.classList.add("drag");
-        }),
-      );
-      ["dragleave", "drop"].forEach((ev) =>
+        });
+      });
+      ["dragleave", "drop"].forEach((ev) => {
         dropzone.addEventListener(ev, (e) => {
           // dragleave fires when the pointer leaves a child element too; without
           // this guard the highlight flickers off while still dragging inside.
           if (e.currentTarget.contains(e.relatedTarget)) return;
           e.preventDefault();
           dropzone.classList.remove("drag");
-        }),
-      );
+        });
+      });
       dropzone.addEventListener("drop", (e) => {
         const f = e.dataTransfer?.files?.[0];
         if (f) setFile(f);
@@ -469,7 +469,7 @@
           xhr.upload.onprogress = (e) => {
             if (e.lengthComputable) {
               const pct = (e.loaded / e.total) * 100;
-              progressBar.style.width = pct + "%";
+              progressBar.style.width = `${pct}%`;
               progressBar.setAttribute("aria-valuenow", String(Math.round(pct)));
               progressLabel.textContent =
                 pct >= 100 ? "Finalizing…" : `${pct.toFixed(0)}% · ${formatSize(e.loaded)} / ${formatSize(e.total)}`;

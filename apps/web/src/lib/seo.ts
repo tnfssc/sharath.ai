@@ -1,18 +1,18 @@
 /** Canonical origin of the site. Single source of truth for absolute URLs (RSS, sitemap, canonical tags). */
-export const SITE_URL = 'https://sharath.ai'
+export const SITE_URL = "https://sharath.ai";
 
 type SeoOptions = {
 	/** Per-page canonical URL; emitted as og:url. For the `<link rel="canonical">` tag, add it to head().links (see canonicalLink). */
-	canonical?: string
-	description?: string
-	image?: string
-	keywords?: string
-	title: string
+	canonical?: string;
+	description?: string;
+	image?: string;
+	keywords?: string;
+	title: string;
 	/** Open Graph object type; defaults to 'website', blog posts pass 'article'. */
-	type?: string
+	type?: string;
 	/** Per-page URL; emitted as og:url (same as canonical when only one is given). */
-	url?: string
-}
+	url?: string;
+};
 
 /**
  * Build the meta-tag array for a route's `head().meta`.
@@ -40,37 +40,37 @@ export const seo = ({
 	image,
 	keywords,
 	title,
-	type = 'website',
+	type = "website",
 	url,
 }: SeoOptions) => {
-	const resolvedUrl = url ?? canonical
+	const resolvedUrl = url ?? canonical;
 	return [
 		{ title },
-		...(description ? [{ name: 'description', content: description }] : []),
-		...(keywords ? [{ name: 'keywords', content: keywords }] : []),
-		{ name: 'twitter:title', content: title },
+		...(description ? [{ name: "description", content: description }] : []),
+		...(keywords ? [{ name: "keywords", content: keywords }] : []),
+		{ name: "twitter:title", content: title },
 		...(description
-			? [{ name: 'twitter:description', content: description }]
+			? [{ name: "twitter:description", content: description }]
 			: []),
-		{ name: 'twitter:creator', content: '@tnfssc' },
-		{ name: 'twitter:site', content: '@tnfssc' },
-		{ name: 'og:type', content: type },
-		{ name: 'og:title', content: title },
-		...(description ? [{ name: 'og:description', content: description }] : []),
-		...(resolvedUrl ? [{ name: 'og:url', content: resolvedUrl }] : []),
+		{ name: "twitter:creator", content: "@tnfssc" },
+		{ name: "twitter:site", content: "@tnfssc" },
+		{ name: "og:type", content: type },
+		{ name: "og:title", content: title },
+		...(description ? [{ name: "og:description", content: description }] : []),
+		...(resolvedUrl ? [{ name: "og:url", content: resolvedUrl }] : []),
 		...(image
 			? [
-					{ name: 'twitter:image', content: image },
-					{ name: 'twitter:card', content: 'summary_large_image' },
-					{ name: 'og:image', content: image },
+					{ name: "twitter:image", content: image },
+					{ name: "twitter:card", content: "summary_large_image" },
+					{ name: "og:image", content: image },
 				]
 			: []),
-	]
-}
+	];
+};
 
 /**
  * A `<link rel="canonical">` entry for `head().links`. Kept separate from
  * `seo()` because TanStack renders the `meta[]` array as `<meta>`/`<title>`
  * tags only — canonical must be a link tag.
  */
-export const canonicalLink = (href: string) => ({ rel: 'canonical', href })
+export const canonicalLink = (href: string) => ({ rel: "canonical", href });

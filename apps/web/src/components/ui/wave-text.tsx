@@ -1,4 +1,5 @@
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+import { useReducedMotion } from "#/lib/use-reduced-motion";
 
 /**
  * Splits text into individual characters, each on a staggered sine wave.
@@ -47,6 +48,7 @@ export function WaveText({
 			<span aria-hidden="true">
 				{Array.from(text).map((char, i) => (
 					<motion.span
+						// biome-ignore lint/suspicious/noArrayIndexKey: Each fixed character position owns its wave phase; characters are never reordered.
 						key={i}
 						className="inline-block"
 						animate={active ? ANIMATE_ACTIVE : ANIMATE_IDLE}

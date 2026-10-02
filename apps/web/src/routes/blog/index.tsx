@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { getAllPosts, slugOf } from "#/lib/blog";
 import { useBlogScrollRestoration } from "#/lib/blog-scroll";
-import { canonicalLink, seo, SITE_URL } from "#/lib/seo";
+import { canonicalLink, SITE_URL, seo } from "#/lib/seo";
 
 export const Route = createFileRoute("/blog/")({
 	head: () => ({

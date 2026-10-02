@@ -1,11 +1,7 @@
 import { Star } from "lucide-react";
-import {
-	motion,
-	useInView,
-	useReducedMotion,
-	type Variants,
-} from "motion/react";
+import { motion, useInView, type Variants } from "motion/react";
 import { useEffect, useRef } from "react";
+import { useReducedMotion } from "#/lib/use-reduced-motion";
 
 /** Easing per DESIGN.md: `cubic-bezier(0.16, 1, 0.3, 1)` — no bouncing/wiggling. */
 const EASE = [0.16, 1, 0.3, 1] as const;

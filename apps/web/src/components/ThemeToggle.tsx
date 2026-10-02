@@ -122,6 +122,12 @@ export default function ThemeToggle() {
 
 	const containerRef = useRef<HTMLDivElement>(null);
 	const triggerRef = useRef<HTMLButtonElement>(null);
+	const searchRef = useRef<HTMLInputElement>(null);
+
+	// Focus search only after the user expands the theme list.
+	useEffect(() => {
+		if (open && moreOpen) searchRef.current?.focus();
+	}, [open, moreOpen]);
 
 	useEffect(() => {
 		setCurrent(
@@ -183,28 +189,13 @@ export default function ThemeToggle() {
 	}
 
 	const moreThemes = useMemo(() => {
-		const all = THEME_GROUPS.flatMap((g) => g.themes).filter(
-			(t) => !PRIMARY_THEMES.includes(t),
-		);
-		if (!query.trim()) {
-			return THEME_GROUPS.map((group) => ({
-				...group,
-				themes: group.themes.filter((t) => !PRIMARY_THEMES.includes(t)),
-			})).filter((g) => g.themes.length > 0);
-		}
-		const q = query.toLowerCase();
-		return all
-			.filter((t) => t.includes(q))
-			.map((t) => ({
-				label: THEME_GROUPS.find((g) => g.themes.includes(t))!.label,
-				themes: [t],
-			}))
-			.reduce((acc: { label: string; themes: string[] }[], item) => {
-				const existing = acc.find((g) => g.label === item.label);
-				if (existing) existing.themes.push(...item.themes);
-				else acc.push(item);
-				return acc;
-			}, []);
+		const q = query.trim() ? query.toLowerCase() : "";
+		return THEME_GROUPS.map((group) => ({
+			...group,
+			themes: group.themes.filter(
+				(theme) => !PRIMARY_THEMES.includes(theme) && theme.includes(q),
+			),
+		})).filter((group) => group.themes.length > 0);
 	}, [query]);
 
 	// Arrow-key navigation across menuitems within the menu.
@@ -314,13 +305,13 @@ export default function ThemeToggle() {
 							<div className="flex items-center gap-2 border-b border-base-300 px-3 py-2">
 								<Search className="size-3.5 shrink-0 text-base-content/50" />
 								<input
+									ref={searchRef}
 									type="text"
 									value={query}
 									onChange={(e) => setQuery(e.target.value)}
 									placeholder="Search themes..."
 									aria-label="Search themes"
 									className="w-full bg-transparent text-sm outline-none placeholder:text-base-content/40"
-									autoFocus
 								/>
 								{query && (
 									<button
@@ -350,9 +341,7 @@ export default function ThemeToggle() {
 													key={theme}
 													type="button"
 													role="menuitem"
-													aria-current={
-														current === theme ? "true" : undefined
-													}
+													aria-current={current === theme ? "true" : undefined}
 													onClick={() => setTheme(theme)}
 													className="flex w-full items-center gap-2.5 rounded-base px-2 py-1.5 text-sm transition-colors hover:bg-base-200"
 												>

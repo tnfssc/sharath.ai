@@ -25,10 +25,10 @@ export const Route = createFileRoute("/blog/$slug")({
 		if (!post) throw notFound();
 		return { post, html: renderMarkdown(post.content) };
 	},
-	component: BlogPost,
+	component: BlogPostPage,
 });
 
-function BlogPost() {
+function BlogPostPage() {
 	const { post, html } = Route.useLoaderData();
 	const { slug } = Route.useParams();
 	return (
@@ -82,6 +82,7 @@ function BlogPost() {
 
 				<div
 					className="prose prose-lg mt-10 max-w-none"
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: HTML is rendered from repository-authored blog markdown, not user input.
 					dangerouslySetInnerHTML={{ __html: html }}
 				/>
 			</div>

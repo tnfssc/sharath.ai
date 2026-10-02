@@ -1,16 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import {
-	motion,
-	useMotionValue,
-	useReducedMotion,
-	useSpring,
-} from "motion/react";
+import { motion, useMotionValue, useSpring } from "motion/react";
 import {
 	type AnchorHTMLAttributes,
 	type MouseEvent,
 	type ReactNode,
 	useRef,
 } from "react";
+import { useReducedMotion } from "#/lib/use-reduced-motion";
 
 type Props = {
 	children: ReactNode;

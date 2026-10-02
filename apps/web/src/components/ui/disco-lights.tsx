@@ -1,4 +1,5 @@
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+import { useReducedMotion } from "#/lib/use-reduced-motion";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -80,9 +81,9 @@ export function DiscoLights({ active }: { active: boolean }) {
 			aria-hidden
 			className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
 		>
-			{orbs.map((orb, i) => (
+			{orbs.map((orb) => (
 				<motion.div
-					key={i}
+					key={`${orb.left}-${orb.top}`}
 					className="absolute rounded-full"
 					style={{
 						width: orb.size,

@@ -1,7 +1,8 @@
-import { motion, useReducedMotion, useScroll, useSpring } from "motion/react";
+import { motion, useScroll, useSpring } from "motion/react";
 import { useRef } from "react";
 import { MagicLink } from "#/components/magic-link";
 import { Reveal } from "#/components/reveal";
+import { useReducedMotion } from "#/lib/use-reduced-motion";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 

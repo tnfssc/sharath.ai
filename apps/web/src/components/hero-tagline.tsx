@@ -1,10 +1,6 @@
-import {
-	AnimatePresence,
-	LayoutGroup,
-	motion,
-	useReducedMotion,
-} from "motion/react";
+import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import type { CSSProperties } from "react";
+import { useReducedMotion } from "#/lib/use-reduced-motion";
 
 /**
  * Per-character tagline swap using AnimatePresence + popLayout + layout.
@@ -105,6 +101,7 @@ export function HeroTagline({ disco }: { disco: boolean }) {
 						<AnimatePresence mode="popLayout" initial={false}>
 							{Array.from(mid).map((char, i) => (
 								<motion.span
+									// biome-ignore lint/suspicious/noArrayIndexKey: Position plus character preserves unchanged slots and animates replacements.
 									key={`${i}-${char}`}
 									layout
 									initial={{ opacity: 0, rotateX: -90 }}

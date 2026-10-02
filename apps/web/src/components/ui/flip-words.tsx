@@ -1,5 +1,6 @@
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
+import { useReducedMotion } from "#/lib/use-reduced-motion";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 

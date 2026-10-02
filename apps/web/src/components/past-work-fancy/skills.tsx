@@ -1,7 +1,7 @@
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import { Fragment } from "react";
-
 import { Reveal } from "#/components/reveal";
+import { useReducedMotion } from "#/lib/use-reduced-motion";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 

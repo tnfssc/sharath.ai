@@ -3,10 +3,10 @@ import {
 	AnimatePresence,
 	motion,
 	useMotionValue,
-	useReducedMotion,
 	useSpring,
 } from "motion/react";
 import { type MouseEvent, type ReactNode, useRef } from "react";
+import { useReducedMotion } from "#/lib/use-reduced-motion";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const ENTER_EXIT = { duration: 0.25, ease: EASE } as const;
@@ -65,6 +65,7 @@ export function PointerHint({
 	return (
 		<span
 			ref={ref}
+			aria-hidden="true"
 			className="absolute inset-0 z-30"
 			onMouseMove={onMouseMove}
 			onMouseEnter={onMouseEnter}

@@ -1,6 +1,6 @@
 import { Github, Linkedin, Youtube } from "lucide-react";
-import { useReducedMotion } from "motion/react";
 import type { SVGProps } from "react";
+import { useReducedMotion } from "#/lib/use-reduced-motion";
 
 import { Magnetic } from "./magnetic";
 

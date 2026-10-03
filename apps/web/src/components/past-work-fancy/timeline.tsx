@@ -6,13 +6,24 @@ import { useReducedMotion } from "#/lib/use-reduced-motion";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
+interface WorkItem {
+	title: string;
+	description: string;
+	tags: string[];
+}
+
 interface Job {
 	company: string;
 	href: string;
 	period: string;
 	role: string;
-	roleHistory?: { role: string; period: string; promoted?: boolean }[];
-	items: { title: string; description: string; tags: string[] }[];
+	roleHistory?: {
+		role: string;
+		period: string;
+		promoted?: boolean;
+		items?: WorkItem[];
+	}[];
+	items?: WorkItem[];
 }
 
 const jobs: Job[] = [
@@ -30,38 +41,55 @@ const jobs: Job[] = [
 			{
 				role: "Software Engineer",
 				period: "Aug 2025 – Sep 2026",
-			},
-		],
-		items: [
-			{
-				title: "Durable agent runtime",
-				description:
-					"Resumable runs, SSE reconnects, replay deduplication, cancellation, recovery, checkpoints, and Restate workflows",
-				tags: ["Python", "Redis Streams", "SSE", "Restate"],
-			},
-			{
-				title: "Nested agents",
-				description:
-					"Parent-child orchestration with background execution, fan-in, inherited context and tools, durable artifacts, and cancellation cascades",
-				tags: ["Multi-agent systems", "Python", "React"],
-			},
-			{
-				title: "Agent Skills + Playbooks",
-				description:
-					"Reusable package-backed capabilities, chat-driven authoring, sandbox execution, scheduling, import/export, and embedded playbook runs",
-				tags: ["Agent Skills", "Playbooks", "Sandboxes"],
-			},
-			{
-				title: "LLM, tools + browser platform",
-				description:
-					"Provider routing and failover, prompt caching, MCP authorization, model catalogs, browser automation, and usage observability",
-				tags: ["LLM routing", "MCP", "Stagehand", "Daytona", "Langfuse"],
-			},
-			{
-				title: "Full-stack product + foundations",
-				description:
-					"Streaming agent UI, nested-run navigation, presentations, multimodal output, safer persistence boundaries, and 73% faster frontend tests",
-				tags: ["TypeScript", "React", "Postgres", "GitHub Actions"],
+				items: [
+					{
+						title: "Async tasks",
+						description: "Claude Code-style asynchronous task execution",
+						tags: ["AI Agents", "Async tasks"],
+					},
+					{
+						title: "Distributed versioned filesystem",
+						description:
+							"Made a distributed, versioned filesystem roughly 50× faster",
+						tags: ["Distributed systems", "Filesystems", "Performance"],
+					},
+					{
+						title: "Software factories",
+						description:
+							"Worked on software factories for automated software development",
+						tags: ["Software factories", "Automation"],
+					},
+					{
+						title: "Durable agent runtime",
+						description:
+							"Resumable runs, SSE reconnects, replay deduplication, cancellation, recovery, checkpoints, and Restate workflows",
+						tags: ["Python", "Redis Streams", "SSE", "Restate"],
+					},
+					{
+						title: "Nested agents",
+						description:
+							"Parent-child orchestration with background execution, fan-in, inherited context and tools, durable artifacts, and cancellation cascades",
+						tags: ["Multi-agent systems", "Python", "React"],
+					},
+					{
+						title: "Agent Skills + Playbooks",
+						description:
+							"Reusable package-backed capabilities, chat-driven authoring, sandbox execution, scheduling, import/export, and embedded playbook runs",
+						tags: ["Agent Skills", "Playbooks", "Sandboxes"],
+					},
+					{
+						title: "LLM, tools + browser platform",
+						description:
+							"Provider routing and failover, prompt caching, MCP authorization, model catalogs, browser automation, and usage observability",
+						tags: ["LLM routing", "MCP", "Stagehand", "Daytona", "Langfuse"],
+					},
+					{
+						title: "Full-stack product + foundations",
+						description:
+							"Streaming agent UI, nested-run navigation, presentations, multimodal output, safer persistence boundaries, and 73% faster frontend tests",
+						tags: ["TypeScript", "React", "Postgres", "GitHub Actions"],
+					},
+				],
 			},
 		],
 	},
@@ -335,23 +363,18 @@ function TimelineJob({ job, index }: { job: Job; index: number }) {
 								)}
 								{entry.period}
 							</p>
+							{entry.items && (
+								<div className="mt-3">
+									<JobItems items={entry.items} />
+								</div>
+							)}
 						</li>
 					))}
 				</ol>
 			) : (
 				<p className="mb-3 text-sm text-base-content/70">{job.role}</p>
 			)}
-			<ul className="space-y-2">
-				{job.items.map((item) => (
-					<li key={item.title} className="text-sm">
-						<span className="font-medium">{item.title}</span>
-						<span className="text-base-content/60">: {item.description}</span>
-						<p className="mt-0.5 text-xs text-base-content/60">
-							{item.tags.join(" · ")}
-						</p>
-					</li>
-				))}
-			</ul>
+			<JobItems items={job.items} />
 		</>
 	);
 
@@ -369,5 +392,23 @@ function TimelineJob({ job, index }: { job: Job; index: number }) {
 		>
 			{content}
 		</motion.li>
+	);
+}
+
+function JobItems({ items }: { items?: WorkItem[] }) {
+	if (!items?.length) return null;
+
+	return (
+		<ul className="space-y-2">
+			{items.map((item) => (
+				<li key={item.title} className="text-sm">
+					<span className="font-medium">{item.title}</span>
+					<span className="text-base-content/60">: {item.description}</span>
+					<p className="mt-0.5 text-xs text-base-content/60">
+						{item.tags.join(" · ")}
+					</p>
+				</li>
+			))}
+		</ul>
 	);
 }

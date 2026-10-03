@@ -4,6 +4,8 @@ import { MagicLink } from "#/components/magic-link";
 import { Reveal } from "#/components/reveal";
 import { useReducedMotion } from "#/lib/use-reduced-motion";
 
+// Hallmark · component: experience timeline · genre: editorial · theme: existing
+// Pre-emit critique: Philosophy 5 · Hierarchy 4 · Execution 4 · Specificity 5 · Restraint 5 · Variety 4
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 interface WorkItem {
@@ -342,20 +344,24 @@ function TimelineJob({ job, index }: { job: Job; index: number }) {
 			{job.roleHistory ? (
 				<ol
 					aria-label={`Role progression at ${job.company}`}
-					className="my-3 space-y-3 border-l border-base-300 pl-4"
+					className="mt-4 space-y-5"
 				>
 					{job.roleHistory.map((entry, roleIndex) => (
 						<li key={`${entry.role}-${entry.period}`} className="relative">
 							<span
 								aria-hidden
-								className={`absolute top-1.5 -left-[19px] size-1.5 rounded-full ${roleIndex === 0 ? "bg-primary" : "bg-base-content/40"}`}
+								className="absolute top-1.5 -left-[30px] size-1.5 rounded-full bg-primary ring-4 ring-base-100"
 							/>
-							<p
-								className={`text-sm ${roleIndex === 0 ? "font-medium text-base-content" : "text-base-content/70"}`}
-							>
-								{entry.role}
-							</p>
-							<p className="text-xs text-base-content/65">{entry.period}</p>
+							<div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+								<h4
+									className={`text-sm font-medium ${roleIndex === 0 ? "text-base-content" : "text-base-content/80"}`}
+								>
+									{entry.role}
+								</h4>
+								<span className="text-xs text-base-content/65">
+									{entry.period}
+								</span>
+							</div>
 							{entry.items && (
 								<div className="mt-3">
 									<JobItems items={entry.items} />

@@ -21,6 +21,7 @@ const TAGLINE_A = "Building next-gen software to make AI more accessible.";
 const TAGLINE_B = "Building next-gen slopware to make human life difficult.";
 
 const roles: [string, ...string[]] = [
+	"senior software engineer",
 	"AI systems engineer",
 	"agent platform builder",
 	"full-stack engineer",

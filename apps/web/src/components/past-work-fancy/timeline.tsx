@@ -11,6 +11,7 @@ interface Job {
 	href: string;
 	period: string;
 	role: string;
+	roleHistory?: { role: string; period: string; promoted?: boolean }[];
 	items: { title: string; description: string; tags: string[] }[];
 }
 
@@ -19,7 +20,18 @@ const jobs: Job[] = [
 		company: "Writer",
 		href: "https://writer.com/",
 		period: "Aug 2025 – now",
-		role: "Software Engineer",
+		role: "Senior Software Engineer",
+		roleHistory: [
+			{
+				role: "Senior Software Engineer",
+				period: "Oct 2026 – now",
+				promoted: true,
+			},
+			{
+				role: "Software Engineer",
+				period: "Aug 2025 – Sep 2026",
+			},
+		],
 		items: [
 			{
 				title: "Durable agent runtime",
@@ -301,7 +313,34 @@ function TimelineJob({ job, index }: { job: Job; index: number }) {
 				</h3>
 				<span className="text-xs text-base-content/65">{job.period}</span>
 			</div>
-			<p className="mb-3 text-sm text-base-content/70">{job.role}</p>
+			{job.roleHistory ? (
+				<ol
+					aria-label={`Role progression at ${job.company}`}
+					className="my-3 space-y-3 border-l border-base-300 pl-4"
+				>
+					{job.roleHistory.map((entry) => (
+						<li key={`${entry.role}-${entry.period}`} className="relative">
+							<span
+								aria-hidden
+								className={`absolute top-1.5 -left-[19px] size-1.5 rounded-full ${entry.promoted ? "bg-primary" : "bg-base-content/40"}`}
+							/>
+							<p
+								className={`text-sm ${entry.promoted ? "font-medium text-base-content" : "text-base-content/70"}`}
+							>
+								{entry.role}
+							</p>
+							<p className="text-xs text-base-content/65">
+								{entry.promoted && (
+									<span className="text-primary">Promoted · </span>
+								)}
+								{entry.period}
+							</p>
+						</li>
+					))}
+				</ol>
+			) : (
+				<p className="mb-3 text-sm text-base-content/70">{job.role}</p>
+			)}
 			<ul className="space-y-2">
 				{job.items.map((item) => (
 					<li key={item.title} className="text-sm">

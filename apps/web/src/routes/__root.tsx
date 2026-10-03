@@ -45,7 +45,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 			...seo({
 				title: "sharath.ai",
 				description:
-					"Sharath — software engineer building AI agents, developer tools, and things that ship.",
+					"Sharath — senior software engineer building AI agents, developer tools, and things that ship.",
 				url: "https://sharath.ai",
 			}),
 		],

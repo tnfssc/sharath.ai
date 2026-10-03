@@ -20,7 +20,6 @@ interface Job {
 	roleHistory?: {
 		role: string;
 		period: string;
-		promoted?: boolean;
 		items?: WorkItem[];
 	}[];
 	items?: WorkItem[];
@@ -36,7 +35,6 @@ const jobs: Job[] = [
 			{
 				role: "Senior Software Engineer",
 				period: "Oct 2026 – now",
-				promoted: true,
 			},
 			{
 				role: "Software Engineer",
@@ -346,23 +344,18 @@ function TimelineJob({ job, index }: { job: Job; index: number }) {
 					aria-label={`Role progression at ${job.company}`}
 					className="my-3 space-y-3 border-l border-base-300 pl-4"
 				>
-					{job.roleHistory.map((entry) => (
+					{job.roleHistory.map((entry, roleIndex) => (
 						<li key={`${entry.role}-${entry.period}`} className="relative">
 							<span
 								aria-hidden
-								className={`absolute top-1.5 -left-[19px] size-1.5 rounded-full ${entry.promoted ? "bg-primary" : "bg-base-content/40"}`}
+								className={`absolute top-1.5 -left-[19px] size-1.5 rounded-full ${roleIndex === 0 ? "bg-primary" : "bg-base-content/40"}`}
 							/>
 							<p
-								className={`text-sm ${entry.promoted ? "font-medium text-base-content" : "text-base-content/70"}`}
+								className={`text-sm ${roleIndex === 0 ? "font-medium text-base-content" : "text-base-content/70"}`}
 							>
 								{entry.role}
 							</p>
-							<p className="text-xs text-base-content/65">
-								{entry.promoted && (
-									<span className="text-primary">Promoted · </span>
-								)}
-								{entry.period}
-							</p>
+							<p className="text-xs text-base-content/65">{entry.period}</p>
 							{entry.items && (
 								<div className="mt-3">
 									<JobItems items={entry.items} />
